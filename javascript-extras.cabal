@@ -21,6 +21,8 @@ library
   ghc-options:         -Wall
   if impl(ghcjs)
     build-depends: ghcjs-base
+  if !impl(ghcjs)
+    build-depends: ghcjs-base-stub
 
 source-repository head
   type:     git

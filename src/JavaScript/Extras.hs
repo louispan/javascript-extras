@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
 module JavaScript.Extras
@@ -21,16 +22,6 @@ strval :: J.JSString -> J.JSVal
 strval = J.jsval
 
 type Property = (J.JSString, J.JSVal)
-
--- | throws an exception if undefined or null
-foreign import javascript unsafe
-  "$2[$1]"
-  js_unsafeGetProperty :: J.JSString -> J.JSVal -> IO J.JSVal
-
--- | throws an exception if undefined or null
-foreign import javascript unsafe
-  "$3[$1] = $2;"
-  js_unsafeSetProperty :: J.JSString -> J.JSVal -> J.JSVal -> IO ()
 
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
 getProperty :: J.JSString -> J.JSVal -> IO J.JSVal
@@ -66,3 +57,27 @@ toJSObject xs = do
     obj <- JO.create
     traverse_ (\(k, v) -> JO.unsafeSetProp k v obj) xs
     pure obj
+
+#ifdef __GHCJS__
+
+-- | throws an exception if undefined or null
+foreign import javascript unsafe
+  "$2[$1]"
+  js_unsafeGetProperty :: J.JSString -> J.JSVal -> IO J.JSVal
+
+-- | throws an exception if undefined or null
+foreign import javascript unsafe
+  "$3[$1] = $2;"
+  js_unsafeSetProperty :: J.JSString -> J.JSVal -> J.JSVal -> IO ()
+
+#else
+
+-- | throws an exception if undefined or null
+js_unsafeGetProperty :: J.JSString -> J.JSVal -> IO J.JSVal
+js_unsafeGetProperty _ _ = pure J.nullRef
+
+-- | throws an exception if undefined or null
+js_unsafeSetProperty :: J.JSString -> J.JSVal -> J.JSVal -> IO ()
+js_unsafeSetProperty _ _ _ = pure ()
+
+#endif
