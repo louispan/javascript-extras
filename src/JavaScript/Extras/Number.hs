@@ -11,7 +11,7 @@ maxSafeInteger = js_maxSafeInteger
 
 foreign import javascript unsafe
   "Number.MAX_SAFE_INTEGER"
-  js_maxSafeInteger :: Int64
+  js_maxSafeInteger :: Int
 
 #else
 
