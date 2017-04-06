@@ -16,16 +16,17 @@ import qualified GHCJS.Marshal.Pure as J
 import qualified GHCJS.Types as J
 import qualified JavaScript.Object as JO
 import qualified JavaScript.Object.Internal as JOI
+import qualified JavaScript.Extras.JSVar as JE
 import Unsafe.Coerce
 
-type Property = (J.JSString, J.JSVal)
+type Property = (J.JSString, JE.JSVar)
 
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
-getProperty :: J.JSString -> J.JSVal -> IO J.JSVal
+getProperty :: J.JSString -> J.JSVal -> IO JE.JSVar
 getProperty k x = let k' = J.pToJSVal k
                   in if J.isUndefined x || J.isNull x
                          || J.isUndefined k' || J.isNull k'
-                     then pure J.nullRef
+                     then pure $ JE.JSVar J.nullRef
                      else js_unsafeGetProperty k x
 
 -- | set a property of any JSVal
@@ -45,19 +46,19 @@ fromProperties xs =
 toProperties :: JO.Object -> IO [Property]
 toProperties obj = do
    props <- JO.listProps obj
-   traverse (\k -> (\v -> (k, v)) <$> JO.unsafeGetProp k obj) props
+   traverse (\k -> (\v -> (k, JE.JSVar v)) <$> JO.unsafeGetProp k obj) props
 
 #ifdef __GHCJS__
 
 -- | throws an exception if undefined or null
 foreign import javascript unsafe
   "$2[$1]"
-  js_unsafeGetProperty :: J.JSString -> J.JSVal -> IO J.JSVal
+  js_unsafeGetProperty :: J.JSString -> J.JSVal -> IO JE.JSVar
 
 -- | throws an exception if undefined or null
 foreign import javascript unsafe
   "$3[$1] = $2;"
-  js_unsafeSetProperty :: J.JSString -> J.JSVal -> J.JSVal -> IO ()
+  js_unsafeSetProperty :: J.JSString -> JE.JSVar -> J.JSVal -> IO ()
 
 -- | zip list of string and JSVal to object, lists must have been completely forced first
 -- Using the idea from JavaScript.Array.Internal.fromList h$fromHsListJSVal
@@ -67,11 +68,11 @@ foreign import javascript unsafe "hje$fromHsZipListJSVal($1, $2)"
 #else
 
 -- | throws an exception if undefined or null
-js_unsafeGetProperty :: J.JSString -> J.JSVal -> IO J.JSVal
-js_unsafeGetProperty _ _ = pure J.nullRef
+js_unsafeGetProperty :: J.JSString -> J.JSVal -> IO JE.JSVar
+js_unsafeGetProperty _ _ = pure $ JE.JSVar J.nullRef
 
 -- | throws an exception if undefined or null
-js_unsafeSetProperty :: J.JSString -> J.JSVal -> J.JSVal -> IO ()
+js_unsafeSetProperty :: J.JSString -> JE.JSVar -> J.JSVal -> IO ()
 js_unsafeSetProperty _ _ _ = pure ()
 
 -- | zip list of string and JSVal to object, lists must have been completely forced first
