@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 module JavaScript.Extras.JSVar where
 
 import Control.DeepSeq
@@ -11,6 +13,9 @@ import JavaScript.Extras.Cast as JE
 -- | Wrapper to have a JSVal that also have an IString instance
 -- This is helpful when using OverloadedStrings
 newtype JSVar = JSVar J.JSVal
+
+instance Show JSVar where
+    show = JS.unpack . js_stringify
 
 instance J.IsJSVal JSVar
 
@@ -33,3 +38,16 @@ toJS' = JSVar . toJS
 
 fromJS' :: JE.FromJS a => JSVar -> Maybe a
 fromJS' (JSVar v) = fromJS v
+
+#ifdef __GHCJS__
+
+foreign import javascript unsafe
+  "$r = hje$stringify($1);"
+  js_stringify :: JSVar -> J.JSString
+
+#else
+
+js_stringify :: JSVar -> J.JSString
+js_stringify _ = JS.empty
+
+#endif
