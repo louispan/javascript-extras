@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE GHCForeignImportPrim #-}
 
 module JavaScript.Extras.Property
@@ -11,6 +12,7 @@ module JavaScript.Extras.Property
 
 import Control.DeepSeq
 import Control.Parallel
+import Data.Coerce
 import qualified GHC.Exts as Exts
 import qualified GHCJS.Marshal.Pure as J
 import qualified GHCJS.Types as J
@@ -22,16 +24,18 @@ import Unsafe.Coerce
 type Property = (J.JSString, JE.JSVar)
 
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
-getProperty :: J.JSString -> J.JSVal -> IO JE.JSVar
-getProperty k x = let k' = J.pToJSVal k
+getProperty :: Coercible a J.JSVal => J.JSString -> a -> IO JE.JSVar
+getProperty k a = let k' = J.pToJSVal k
+                      x = coerce a
                   in if J.isUndefined x || J.isNull x
                          || J.isUndefined k' || J.isNull k'
                      then pure $ JE.JSVar J.nullRef
                      else js_unsafeGetProperty k x
 
 -- | set a property of any JSVal
-setProperty :: Property -> J.JSVal -> IO ()
-setProperty (k, v) x = let k' = J.pToJSVal k
+setProperty :: Coercible a J.JSVal => Property -> a -> IO ()
+setProperty (k, v) a = let k' = J.pToJSVal k
+                           x = coerce a
                     in if J.isUndefined x || J.isNull x
                           || J.isUndefined k' || J.isNull k'
                        then pure ()
