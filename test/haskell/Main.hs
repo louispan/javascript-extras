@@ -3,13 +3,13 @@
 
 module Main (main) where
 
+#ifdef __GHCJS__
+
 import qualified Data.JSString as JS
 import qualified GHCJS.Foreign.Callback as J
 import qualified GHCJS.Types as J
 import qualified JavaScript.Extras as JE
 import qualified JavaScript.Extras.JSVar.Unsafe as JE
-
-#ifdef __GHCJS__
 
 test :: JE.JSVar -> IO ()
 test x = do

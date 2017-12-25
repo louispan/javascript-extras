@@ -1,9 +1,12 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE GHCForeignImportPrim #-}
+{-# LANGUAGE TupleSections #-}
 
 module JavaScript.Extras.Property
-    ( Property
+    ( classNames
+    , justProperties
+    , Property
     , getProperty
     , setProperty
     , fromProperties
@@ -13,15 +16,27 @@ module JavaScript.Extras.Property
 import Control.DeepSeq
 import Control.Parallel
 import Data.Coerce
+import Data.Maybe
 import qualified GHC.Exts as Exts
 import qualified GHCJS.Marshal.Pure as J
 import qualified GHCJS.Types as J
+import qualified Data.JSString as JS
 import qualified JavaScript.Object as JO
 import qualified JavaScript.Object.Internal as JOI
 import qualified JavaScript.Extras.JSVar as JE
 import Unsafe.Coerce
 
 type Property = (J.JSString, JE.JSVar)
+
+-- | Creates a JE.JSVar single string for "className" property from a list of (JSString, Bool)
+-- Idea from https://github.com/JedWatson/classnames
+classNames :: [(J.JSString, Bool)] -> JE.JSVar
+classNames = JE.toJS' . JS.unwords . fmap fst . filter snd
+
+-- | Create a [(a, b)] with only the Just values in a list of (a, Maybe b)
+-- This can be used to create a list of [Property] from a [(JSString, Maybe JSVar)]
+justSnds :: [(a, Maybe b)] -> [(a, b)]
+justSnds xs = catMaybes $ (\(k, x) -> (k,) <$> x ) <$> xs
 
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
 getProperty :: Coercible a J.JSVal => J.JSString -> a -> IO JE.JSVar
