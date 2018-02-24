@@ -1,5 +1,5 @@
 name:                javascript-extras
-version:             0.3.3.0
+version:             0.4.0.0
 synopsis:            Extra javascript functions when using GHCJS
 description:         Extra javascript functions when using GHCJS
 homepage:            https://github.com/louispan/javascript-extras#readme
@@ -20,8 +20,8 @@ library
                        JavaScript.Extras.Cast
                        JavaScript.Extras.Number
                        JavaScript.Extras.Property
-                       JavaScript.Extras.JSVar
-                       JavaScript.Extras.JSVar.Unsafe
+                       JavaScript.Extras.JSRep
+                       JavaScript.Extras.JSRep.Unsafe
   build-depends:       base >= 4.7 && < 5
                      , deepseq >= 1.4
                      , parallel >= 3.2
