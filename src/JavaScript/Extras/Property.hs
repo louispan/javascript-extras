@@ -5,7 +5,6 @@
 
 module JavaScript.Extras.Property
     ( classNames
-    , justSnds
     , Property
     , getProperty
     , setProperty
@@ -15,12 +14,12 @@ module JavaScript.Extras.Property
 
 import Control.DeepSeq
 import Control.Parallel
-import Data.Coerce
 import qualified Data.JSString as JS
 import Data.Maybe
 import qualified GHC.Exts as Exts
 import qualified GHCJS.Marshal.Pure as J
 import qualified GHCJS.Types as J
+import qualified JavaScript.Extras.Cast as JE
 import qualified JavaScript.Extras.JSRep as JE
 import qualified JavaScript.Object as JO
 import qualified JavaScript.Object.Internal as JOI
@@ -33,24 +32,19 @@ type Property = (J.JSString, JE.JSRep)
 classNames :: [(J.JSString, Bool)] -> JE.JSRep
 classNames = JE.toJSR . JS.unwords . fmap fst . filter snd
 
--- | Create a [(a, b)] with only the Just values in a list of (a, Maybe b)
--- This can be used to create a list of [Property] from a [(JSString, Maybe JSRep)]
-justSnds :: [(a, Maybe b)] -> [(a, b)]
-justSnds xs = catMaybes $ (\(k, x) -> (k,) <$> x ) <$> xs
-
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
-getProperty :: Coercible a J.JSVal => J.JSString -> a -> IO JE.JSRep
+getProperty :: JE.ToJS a => J.JSString -> a -> IO JE.JSRep
 getProperty k a = let k' = J.pToJSVal k
-                      x = coerce a
+                      x = JE.toJS a
                   in if J.isUndefined x || J.isNull x
                          || J.isUndefined k' || J.isNull k'
                      then pure $ JE.JSRep J.nullRef
                      else js_unsafeGetProperty k x
 
 -- | set a property of any JSVal
-setProperty :: Coercible a J.JSVal => Property -> a -> IO ()
+setProperty :: JE.ToJS a => Property -> a -> IO ()
 setProperty (k, v) a = let k' = J.pToJSVal k
-                           x = coerce a
+                           x = JE.toJS a
                     in if J.isUndefined x || J.isNull x
                           || J.isUndefined k' || J.isNull k'
                        then pure ()
