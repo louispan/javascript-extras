@@ -15,7 +15,6 @@ module JavaScript.Extras.Property
 import Control.DeepSeq
 import Control.Parallel
 import qualified Data.JSString as JS
-import Data.Maybe
 import qualified GHC.Exts as Exts
 import qualified GHCJS.Marshal.Pure as J
 import qualified GHCJS.Types as J
