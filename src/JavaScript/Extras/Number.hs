@@ -29,7 +29,7 @@ foreign import javascript unsafe
 
 foreign import javascript unsafe
   "Number.MIN_SAFE_INTEGER"
-  js_maxSafeInteger :: Int
+  js_minSafeInteger :: Int
 
 #else
 
