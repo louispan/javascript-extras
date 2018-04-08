@@ -9,7 +9,7 @@ import qualified Data.JSString as JS
 import qualified GHCJS.Foreign.Callback as J
 import qualified GHCJS.Types as J
 import qualified JavaScript.Extras as JE
-import qualified JavaScript.Extras.JSRep.Unsafe as JE
+import JavaScript.Extras.JSRep.Unsafe ()
 
 test :: JE.JSRep -> IO ()
 test x = do

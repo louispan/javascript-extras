@@ -34,7 +34,7 @@ library
     build-depends: ghcjs-base-stub >= 0.1.0.1
 
 executable javascript-extras-test
-  hs-source-dirs:      test/haskell
+  hs-source-dirs:      test/hs
   main-is:             Main.hs
   ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
   cpp-options:         -DGHCJS_BROWSER
