@@ -1,18 +1,23 @@
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE DeriveGeneric #-}
 
 module JavaScript.Extras.JSRep where
 
 import Control.DeepSeq
+import Control.Newtype.Generics
 import Data.Coerce
 import Data.JSString as JS
 import Data.String
+import GHC.Generics
 import qualified GHCJS.Marshal.Pure as J
 import qualified GHCJS.Types as J
 import JavaScript.Extras.Cast as JE
 
 -- | Wrapper to have a JSVal that also have an IString instance
 -- This is helpful when using OverloadedStrings
-newtype JSRep = JSRep J.JSVal
+newtype JSRep = JSRep J.JSVal deriving (Generic)
+
+instance Newtype JSRep
 
 instance Show JSRep where
     show = JS.unpack . js_stringify
