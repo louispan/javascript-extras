@@ -37,13 +37,13 @@ resolver: nightly-2018-04-21
 # will not be run. This is useful for tweaking upstream packages.
 packages:
 - '.'
-- location: '/Users/louis/repo/js/ghcjs-base-stub'
-  extra-dep: true
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
 extra-deps:
-# - ghcjs-base-stub-0.2
+- git: git@github.com:ghcjs/ghcjs-base.git
+  commit: 4560541fbab5b77ee34d0348ec04bb1dda8e5db3
+- '/Users/louis/repo/js/ghcjs-base-stub'
 
 # Override default flag values for local packages and extra-deps
 flags: {}
