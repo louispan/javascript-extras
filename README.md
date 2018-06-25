@@ -4,6 +4,10 @@ Extra javascript functions when using GHCJS
 
 # Changelog
 
+* 0.5.0.0
+  - flipped the args of `getProperty` and `setProperty`
+    This makes it easier for chaining.
+
 * 0.4.0.0
   - Renamed `JSVar` to `JSRep` to avoid confusion with `JSVal`
   - Renamed `toJS'` to `toJSR`

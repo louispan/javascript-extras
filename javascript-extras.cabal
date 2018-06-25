@@ -1,5 +1,5 @@
 name:                javascript-extras
-version:             0.4.0.0
+version:             0.5.0.0
 synopsis:            Extra javascript functions when using GHCJS
 description:         Extra javascript functions when using GHCJS
 homepage:            https://github.com/louispan/javascript-extras#readme
