@@ -20,6 +20,7 @@ function hje$fromHsZipListJSVal(names, xs) {
     return obj;
 }
 
+// stringify can fail and return
 var hge$javascriptStringify_ = null;
 function hje$stringify(v) {
     if (!hge$javascriptStringify_) {

@@ -4,6 +4,9 @@ Extra javascript functions when using GHCJS
 
 # Changelog
 
+* 0.6.0.0
+  - renamed `getProperty` and `setProperty` to `getPropertyIO` and `setPropertyIO`
+
 * 0.5.0.0
   - flipped the args of `getProperty` and `setProperty`
     This makes it easier for chaining.

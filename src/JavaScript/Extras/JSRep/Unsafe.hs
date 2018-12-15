@@ -3,13 +3,13 @@
 
 module JavaScript.Extras.JSRep.Unsafe where
 
-import Data.JSString as JS
+import Data.JSString as J
 import qualified GHCJS.Types as J
 import JavaScript.Extras.JSRep as JE
 
 -- | Injection attack! Use with care
 instance Read JE.JSRep where
-    readsPrec _ str = [(js_eval (JS.pack str), [])]
+    readsPrec _ str = [(js_eval (J.pack str), [])]
 
 #ifdef __GHCJS__
 

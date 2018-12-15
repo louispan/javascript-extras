@@ -6,8 +6,8 @@
 module JavaScript.Extras.Property
     ( classNames
     , Property
-    , getProperty
-    , setProperty
+    , getPropertyIO
+    , setPropertyIO
     , fromProperties
     , toProperties
     ) where
@@ -32,18 +32,18 @@ classNames :: [(J.JSString, Bool)] -> JE.JSRep
 classNames = JE.toJSR . JS.unwords . fmap fst . filter snd
 
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
-getProperty :: JE.ToJS j => J.JSString -> j -> IO JE.JSRep
-getProperty k j = let k' = J.pToJSVal k
-                      x = JE.toJS j
+getPropertyIO :: JE.ToJS j => J.JSString -> j -> IO JE.JSRep
+getPropertyIO k j = let k' = J.pToJSVal k
+                        x = JE.toJS j
                   in if J.isUndefined x || J.isNull x
                          || J.isUndefined k' || J.isNull k'
                      then pure $ JE.JSRep J.nullRef
                      else js_unsafeGetProperty k x
 
 -- | set a property of any JSVal
-setProperty :: JE.ToJS j => Property -> j -> IO ()
-setProperty (k, v) j = let k' = J.pToJSVal k
-                           x = JE.toJS j
+setPropertyIO :: JE.ToJS j => Property -> j -> IO ()
+setPropertyIO (k, v) j = let k' = J.pToJSVal k
+                             x = JE.toJS j
                     in if J.isUndefined x || J.isNull x
                           || J.isUndefined k' || J.isNull k'
                        then pure ()

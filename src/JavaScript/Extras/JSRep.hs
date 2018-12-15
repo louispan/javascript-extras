@@ -6,7 +6,7 @@ module JavaScript.Extras.JSRep where
 import Control.DeepSeq
 import Control.Newtype.Generics
 import Data.Coerce
-import Data.JSString as JS
+import Data.JSString as J
 import Data.String
 import GHC.Generics
 import qualified GHCJS.Marshal.Pure as J
@@ -20,7 +20,7 @@ newtype JSRep = JSRep J.JSVal deriving (Generic)
 instance Newtype JSRep
 
 instance Show JSRep where
-    show = JS.unpack . js_stringify
+    show = maybe "undefined" J.unpack . fromJSR . js_stringify
 
 instance J.IsJSVal JSRep
 
@@ -33,7 +33,7 @@ instance JE.FromJS JSRep where
     fromJS v = coerce (fromJS v :: Maybe J.JSVal)
 
 instance IsString JSRep where
-    fromString = JSRep . J.jsval . JS.pack
+    fromString = JSRep . J.jsval . J.pack
 
 instance NFData JSRep where
     rnf (JSRep v) = rnf v
@@ -48,11 +48,11 @@ fromJSR (JSRep v) = fromJS v
 
 foreign import javascript unsafe
   "$r = hje$stringify($1);"
-  js_stringify :: JSRep -> J.JSString
+  js_stringify :: JSRep -> JSRep
 
 #else
 
-js_stringify :: JSRep -> J.JSString
-js_stringify _ = JS.empty
+js_stringify :: JSRep -> JSRep
+js_stringify _ = JSRep J.nullRef
 
 #endif

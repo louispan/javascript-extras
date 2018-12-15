@@ -16,7 +16,7 @@
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
 resolver: nightly-2018-04-21
-# resolver: lts-7.19
+# resolver: lts-7.24
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -43,7 +43,7 @@ packages:
 # (e.g., acme-missiles-0.3)
 extra-deps:
 - git: git@github.com:ghcjs/ghcjs-base.git
-  commit: b4a8d578758613e5c7db88891f444ff5e6f3edb9
+  commit: HEAD
 - ghcjs-base-stub-0.2.0.0
 - newtype-generics-0.5.3
 
