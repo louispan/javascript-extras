@@ -22,7 +22,9 @@ library
                        JavaScript.Extras.Property
                        JavaScript.Extras.JSRep
                        JavaScript.Extras.JSRep.Unsafe
+                       JavaScript.Extras.Aeson.Instances
   build-depends:       base >= 4.7 && < 5
+                     , aeson >= 1.1.2.0
                      , deepseq >= 1.4
                      , newtype-generics >= 0.5
                      , parallel >= 3.2
