@@ -1,8 +1,12 @@
 {-# OPTIONS_GHC -fno-warn-orphans #-}
 
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+
 module JavaScript.Extras.Aeson.Instances where
 
 import Data.Aeson
+import Data.Aeson.Applicative
 import qualified Data.Aeson.Encoding as E
 import qualified Data.JSString as J
 import qualified Data.JSString.Text as J
@@ -17,3 +21,10 @@ instance ToJSON J.JSString where
 
     toEncoding = E.text . J.textFromJSString
     {-# INLINE toEncoding #-}
+
+instance Applicative m => MToJSON m J.JSString where
+    mToEncoding = pure . toEncoding
+
+instance Applicative m => MFromJSON m J.JSString where
+    mParseJSON = fmap pure . parseJSON
+
