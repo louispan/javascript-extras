@@ -22,9 +22,9 @@ instance ToJSON J.JSString where
     toEncoding = E.text . J.textFromJSString
     {-# INLINE toEncoding #-}
 
-instance Applicative m => MToJSON m J.JSString where
-    mToEncoding = pure . toEncoding
+instance Applicative m => AToJSON m J.JSString where
+    atoEncoding = pure . toEncoding
 
-instance Applicative m => MFromJSON m J.JSString where
-    mParseJSON = fmap pure . parseJSON
+instance Applicative m => AFromJSON m J.JSString where
+    aparseJSON = fmap pure . parseJSON
 
