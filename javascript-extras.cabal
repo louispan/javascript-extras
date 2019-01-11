@@ -25,8 +25,8 @@ library
                        JavaScript.Extras.Aeson.Instances
   build-depends:       base >= 4.7 && < 5
                      , aeson >= 1.1.2.0
+                     , aeson-applicative >= 1.4
                      , deepseq >= 1.4
-                     , glazier >= 1.1
                      , newtype-generics >= 0.5
                      , parallel >= 3.2
                      , text >= 1.2

@@ -44,6 +44,7 @@ packages:
 extra-deps:
 - git: git@github.com:ghcjs/ghcjs-base.git
   commit: HEAD
+- '/Users/louis/repo/hs/aeson-applicative'
 - alternators-1.0.0.0
 - ghcjs-base-stub-0.2.0.0
 - newtype-generics-0.5.3
