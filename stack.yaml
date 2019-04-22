@@ -15,8 +15,8 @@
 # resolver:
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
-resolver: lts-7.24
-# resolver: lts-7.24
+resolver: nightly-2018-12-17 # 8.6.2
+# resolver: lts-7.24 # 8.0.1
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -44,11 +44,9 @@ packages:
 extra-deps:
 - git: git@github.com:ghcjs/ghcjs-base.git
   commit: HEAD
-- '/Users/louis/repo/hs/aeson-applicative'
 - alternators-1.0.0.0
-- ghcjs-base-stub-0.2.0.0
+- '/Users/louis/repo/js/ghcjs-base-stub'
 - newtype-generics-0.5.3
-- aeson-1.1.2.0
 - '/Users/louis/repo/hs/glazier'
 - data-diverse-4.6.0.0
 - data-diverse-lens-4.3.0.0

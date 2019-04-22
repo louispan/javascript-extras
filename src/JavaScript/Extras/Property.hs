@@ -8,8 +8,8 @@ module JavaScript.Extras.Property
     , Property
     , getPropertyIO
     , setPropertyIO
-    , fromProperties
-    , toProperties
+    , propertiesToObject
+    , objectToProperties
     ) where
 
 import Control.DeepSeq
@@ -49,14 +49,14 @@ setPropertyIO (k, v) j = let k' = J.pToJSVal k
                        then pure ()
                        else js_unsafeSetProperty k v x
 
-fromProperties :: [Property] -> JO.Object
-fromProperties xs =
+propertiesToObject :: [Property] -> JO.Object
+propertiesToObject xs =
     let (names, values) = unzip xs
     in (rnf names `seq` rnf values) `pseq` js_toJSObjectPure (unsafeCoerce names) (unsafeCoerce values)
 
 
-toProperties :: JO.Object -> IO [Property]
-toProperties obj = do
+objectToProperties :: JO.Object -> IO [Property]
+objectToProperties obj = do
    props <- JO.listProps obj
    traverse (\k -> (\v -> (k, JE.JSRep v)) <$> JO.unsafeGetProp k obj) props
 
