@@ -29,7 +29,7 @@ type Property = (J.JSString, JE.JSRep)
 -- | Creates a JE.JSRep single string for "className" property from a list of (JSString, Bool)
 -- Idea from https://github.com/JedWatson/classnames
 classNames :: [(J.JSString, Bool)] -> JE.JSRep
-classNames = JE.toJSR . JS.unwords . fmap fst . filter snd
+classNames = JE.toJSRep . JS.unwords . fmap fst . filter snd
 
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
 getPropertyIO :: JE.ToJS j => J.JSString -> j -> IO JE.JSRep

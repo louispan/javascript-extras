@@ -20,7 +20,7 @@ newtype JSRep = JSRep J.JSVal deriving (Generic)
 instance Newtype JSRep
 
 instance Show JSRep where
-    show = maybe "undefined" J.unpack . fromJSR . js_stringify
+    show = maybe "undefined" J.unpack . fromJSRep . js_stringify
 
 instance J.IsJSVal JSRep
 
@@ -38,11 +38,11 @@ instance IsString JSRep where
 instance NFData JSRep where
     rnf (JSRep v) = rnf v
 
-toJSR :: JE.ToJS a => a -> JSRep
-toJSR = JSRep . toJS
+toJSRep :: JE.ToJS a => a -> JSRep
+toJSRep = JSRep . toJS
 
-fromJSR :: JE.FromJS a => JSRep -> Maybe a
-fromJSR (JSRep v) = fromJS v
+fromJSRep :: JE.FromJS a => JSRep -> Maybe a
+fromJSRep (JSRep v) = fromJS v
 
 #ifdef __GHCJS__
 
