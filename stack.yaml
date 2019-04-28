@@ -53,6 +53,7 @@ extra-deps:
 - data-has-0.3.0.0
 - unliftio-0.2.7.0
 - unliftio-core-0.1.1.0
+- '/Users/louis/repo/hs/aeson-applicative'
 
 # Override default flag values for local packages and extra-deps
 flags: {}
