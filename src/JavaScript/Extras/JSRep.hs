@@ -3,10 +3,11 @@
 
 module JavaScript.Extras.JSRep where
 
+import Control.Applicative
 import Control.DeepSeq
 import Control.Newtype.Generics
 import Data.Coerce
-import Data.JSString as J
+import qualified Data.JSString as J
 import Data.String
 import GHC.Generics
 import qualified GHCJS.Marshal.Pure as J
@@ -41,8 +42,12 @@ instance NFData JSRep where
 toJSRep :: JE.ToJS a => a -> JSRep
 toJSRep = JSRep . toJS
 
-fromJSRep :: JE.FromJS a => JSRep -> Maybe a
-fromJSRep (JSRep v) = fromJS v
+whenJSRep :: (Alternative m, JE.ToJS a) => Maybe a -> m JSRep
+whenJSRep = fmap toJSRep . maybe empty pure
+
+-- | Remember 'Maybe' is also an instance of Alternative
+fromJSRep :: (Alternative m, JE.FromJS a) => JSRep -> m a
+fromJSRep (JSRep v) = maybe empty pure $ fromJS v
 
 #ifdef __GHCJS__
 

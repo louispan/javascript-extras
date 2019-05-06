@@ -5,7 +5,7 @@
 
 module JavaScript.Extras.Property
     ( classNames
-    , Property
+    -- , Property
     , getPropertyIO
     , setPropertyIO
     , propertiesToObject
@@ -24,7 +24,7 @@ import qualified JavaScript.Object as JO
 import qualified JavaScript.Object.Internal as JOI
 import Unsafe.Coerce
 
-type Property = (J.JSString, JE.JSRep)
+-- type Property = (J.JSString, JE.JSRep)
 
 -- | Creates a JE.JSRep single string for "className" property from a list of (JSString, Bool)
 -- Idea from https://github.com/JedWatson/classnames
@@ -33,29 +33,32 @@ classNames = JE.toJSRep . JS.unwords . fmap fst . filter snd
 
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
 getPropertyIO :: JE.ToJS j => J.JSString -> j -> IO JE.JSRep
-getPropertyIO k j = let k' = J.pToJSVal k
-                        x = JE.toJS j
-                  in if J.isUndefined x || J.isNull x
-                         || J.isUndefined k' || J.isNull k'
-                     then pure $ JE.JSRep J.nullRef
-                     else js_unsafeGetProperty k x
-
+getPropertyIO k j =
+    if J.isUndefined x || J.isNull x
+        || J.isUndefined k' || J.isNull k'
+    then pure $ JE.JSRep J.nullRef
+    else js_unsafeGetProperty k x
+  where
+    k' = J.pToJSVal k
+    x = JE.toJS j
 -- | set a property of any JSVal
-setPropertyIO :: JE.ToJS j => Property -> j -> IO ()
-setPropertyIO (k, v) j = let k' = J.pToJSVal k
-                             x = JE.toJS j
-                    in if J.isUndefined x || J.isNull x
-                          || J.isUndefined k' || J.isNull k'
-                       then pure ()
-                       else js_unsafeSetProperty k v x
+setPropertyIO :: JE.ToJS j => (J.JSString, JE.JSRep) -> j -> IO ()
+setPropertyIO (k, v) j =
+    if J.isUndefined x || J.isNull x
+        || J.isUndefined k' || J.isNull k'
+    then pure ()
+    else js_unsafeSetProperty k v x
+  where
+    k' = J.pToJSVal k
+    x = JE.toJS j
 
-propertiesToObject :: [Property] -> JO.Object
-propertiesToObject xs =
-    let (names, values) = unzip xs
-    in (rnf names `seq` rnf values) `pseq` js_toJSObjectPure (unsafeCoerce names) (unsafeCoerce values)
+propertiesToObject :: [(J.JSString, JE.JSRep)] -> JO.Object
+propertiesToObject xs = (rnf names `seq` rnf values) `pseq` js_toJSObjectPure (unsafeCoerce names) (unsafeCoerce values)
+  where
+    (names, values) = unzip xs
 
 
-objectToProperties :: JO.Object -> IO [Property]
+objectToProperties :: JO.Object -> IO [(J.JSString, JE.JSRep)]
 objectToProperties obj = do
    props <- JO.listProps obj
    traverse (\k -> (\v -> (k, JE.JSRep v)) <$> JO.unsafeGetProp k obj) props

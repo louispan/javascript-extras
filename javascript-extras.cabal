@@ -17,12 +17,12 @@ library
   hs-source-dirs:      src
   js-sources:          jsbits/extras.js
   exposed-modules:     JavaScript.Extras
+                       JavaScript.Extras.Aeson.Instances
                        JavaScript.Extras.Cast
-                       JavaScript.Extras.Number
-                       JavaScript.Extras.Property
                        JavaScript.Extras.JSRep
                        JavaScript.Extras.JSRep.Unsafe
-                       JavaScript.Extras.Aeson.Instances
+                       JavaScript.Extras.Number
+                       JavaScript.Extras.Property
   build-depends:       base >= 4.7 && < 5
                      , aeson >= 1.4.2.0
                      , aeson-applicative >= 1.4
