@@ -4,9 +4,12 @@
 
 module JavaScript.Extras.Cast
     ( ToJS(..)
+    , toJS_
     , FromJS(..)
+    , fromJS_
     ) where
 
+import Control.Lens
 import qualified Data.JSString as JS
 import qualified Data.Text as T
 import GHC.Int
@@ -74,6 +77,9 @@ instance ToJS J.JSString
 instance ToJS a => ToJS (Maybe a) where
     toJS Nothing  = J.nullRef
     toJS (Just a) = toJS a
+
+toJS_ :: ToJS a => Getting J.JSVal a J.JSVal
+toJS_ = to toJS
 
 -- | This provides a consistent way to safely convert from JSVal.
 -- The semantics is that if the return value is a Just, then the JSVal is not a null value.
@@ -179,6 +185,9 @@ instance FromJS String where
 instance FromJS J.JSString where
     fromJS a | JFI.jsonTypeOf a == JFI.JSONString = J.pFromJSVal a
     fromJS _ = Nothing
+
+fromJS_ :: FromJS a => Getting (Maybe a) J.JSVal (Maybe a)
+fromJS_ = to fromJS
 
 #ifdef __GHCJS__
 

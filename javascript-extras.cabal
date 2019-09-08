@@ -19,14 +19,15 @@ library
   exposed-modules:     JavaScript.Extras
                        JavaScript.Extras.Aeson.Instances
                        JavaScript.Extras.Cast
-                       JavaScript.Extras.JSRep
-                       JavaScript.Extras.JSRep.Unsafe
+                       JavaScript.Extras.JSVal.Instances
+                       JavaScript.Extras.JSVal.Unsafe
                        JavaScript.Extras.Number
                        JavaScript.Extras.Property
   build-depends:       base >= 4.7 && < 5
-                     , aeson >= 1.4.2.0
+                     , aeson >= 1.4.2
                      , aeson-applicative >= 1.4
                      , deepseq >= 1.4
+                     , lens >= 4.14
                      , newtype-generics >= 0.5
                      , parallel >= 3.2
                      , text >= 1.2

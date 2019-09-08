@@ -7,6 +7,7 @@ Extra javascript functions when using GHCJS
 * 0.6.0.0
   - renamed `getProperty` and `setProperty` to `getPropertyIO` and `setPropertyIO`
   - Added instances for `Data.Aeson` and `Data.Aeson.Applicative`.
+  - Removed JSRep; using orphan instances of JSVal instead.
 
 * 0.5.0.0
   - flipped the args of `getProperty` and `setProperty`
