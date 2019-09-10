@@ -14,6 +14,8 @@ instance Show J.JSVal where
 instance IsString J.JSVal where
     fromString = J.jsval . J.pack
 
+instance J.IsJSVal J.JSVal
+
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
