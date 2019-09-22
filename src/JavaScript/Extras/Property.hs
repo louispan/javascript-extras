@@ -20,30 +20,28 @@ import qualified JavaScript.Object as JO
 import qualified JavaScript.Object.Internal as JOI
 import Unsafe.Coerce
 
--- type Property = (J.JSString, JE.JSRep)
-
 -- -- | Creates a JE.JSRep single string for "className" property from a list of (JSString, Bool)
 -- -- Idea from https://github.com/JedWatson/classnames
 -- classNames :: [(J.JSString, Bool)] -> JE.JSRep
 -- classNames = JE.toJSRep . JS.unwords . fmap fst . filter snd
 
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
-getPropertyIO :: JE.ToJS j => J.JSString -> j -> IO J.JSVal
-getPropertyIO k j =
+getPropertyIO :: JE.ToJS j => j -> J.JSString -> IO J.JSVal
+getPropertyIO j k =
     if J.isUndefined x || J.isNull x
         || J.isUndefined k' || J.isNull k'
     then pure $ J.nullRef
-    else js_unsafeGetProperty k x
+    else js_unsafeGetProperty x k
   where
     k' = J.pToJSVal k
     x = JE.toJS j
 -- | set a property of any JSVal
-setPropertyIO :: JE.ToJS j => (J.JSString, J.JSVal) -> j -> IO ()
-setPropertyIO (k, v) j =
+setPropertyIO :: JE.ToJS j => j -> (J.JSString, J.JSVal) -> IO ()
+setPropertyIO j (k, v) =
     if J.isUndefined x || J.isNull x
         || J.isUndefined k' || J.isNull k'
     then pure ()
-    else js_unsafeSetProperty k v x
+    else js_unsafeSetProperty x k v
   where
     k' = J.pToJSVal k
     x = JE.toJS j
@@ -63,13 +61,13 @@ objectToProperties obj = do
 
 -- | throws an exception if undefined or null
 foreign import javascript unsafe
-  "$2[$1]"
-  js_unsafeGetProperty :: J.JSString -> J.JSVal -> IO J.JSVal
+  "$1[$2]"
+  js_unsafeGetProperty :: J.JSVal -> J.JSString -> IO J.JSVal
 
 -- | throws an exception if undefined or null
 foreign import javascript unsafe
-  "$3[$1] = $2;"
-  js_unsafeSetProperty :: J.JSString -> J.JSVal -> J.JSVal -> IO ()
+  "$1[$2] = $3;"
+  js_unsafeSetProperty :: J.JSVal -> J.JSString -> J.JSVal -> IO ()
 
 -- | zip list of string and JSVal to object, lists must have been completely forced first
 -- Using the idea from JavaScript.Array.Internal.fromList h$fromHsListJSVal
@@ -80,11 +78,11 @@ foreign import javascript unsafe
 #else
 
 -- | throws an exception if undefined or null
-js_unsafeGetProperty :: J.JSString -> J.JSVal -> IO J.JSVal
+js_unsafeGetProperty :: J.JSVal -> J.JSString -> IO J.JSVal
 js_unsafeGetProperty _ _ = pure $ J.nullRef
 
 -- | throws an exception if undefined or null
-js_unsafeSetProperty :: J.JSString -> J.JSVal -> J.JSVal -> IO ()
+js_unsafeSetProperty :: J.JSVal -> J.JSString -> J.JSVal -> IO ()
 js_unsafeSetProperty _ _ _ = pure ()
 
 -- | zip list of string and JSVal to object, lists must have been completely forced first
