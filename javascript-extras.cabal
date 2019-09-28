@@ -15,7 +15,7 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  js-sources:          jsbits/extras.js
+  js-sources:          jsbits/javascript-extras.js
   exposed-modules:     JavaScript.Extras
                        JavaScript.Extras.Aeson.Instances
                        JavaScript.Extras.Cast

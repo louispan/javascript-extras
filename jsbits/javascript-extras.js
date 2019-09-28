@@ -10,23 +10,23 @@
 
 // zip list of string and JSVal to object, lists must have been completely forced first
 // Using the idea from JavaScript.Array.Internal.fromList h$fromHsListJSVal
-function hje$fromHsZipListJSVal(names, xs) {
+function hje$fromHsZipListJSVal(namess, xs) {
     var obj = {};
-    while(IS_CONS(names) && IS_CONS(xs)) {
-        obj[JSVAL_VAL(CONS_HEAD(names))] = JSVAL_VAL(CONS_HEAD(xs));
-        names = CONS_TAIL(names);
+    while(IS_CONS(namess) && IS_CONS(xs)) {
+        obj[JSVAL_VAL(CONS_HEAD(namess))] = JSVAL_VAL(CONS_HEAD(xs));
+        namess = CONS_TAIL(namess);
         xs = CONS_TAIL(xs);
     }
     return obj;
 }
 
 // stringify can fail and return
-var hge$javascriptStringify_ = null;
+var hge$stringify_ = null;
 function hje$stringify(v) {
-    if (!hge$javascriptStringify_) {
-        hge$javascriptStringify_ = require('javascript-stringify');
+    if (!hge$stringify_) {
+        hge$stringify_ = require('javascript-stringify');
     }
-    return hge$javascriptStringify_(v, null, null, { references: true })
+    return hge$stringify_(v, null, null, { references: true })
 }
 
 // Injection attack! Use with care
