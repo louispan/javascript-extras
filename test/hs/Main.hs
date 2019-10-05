@@ -9,12 +9,12 @@ import qualified Data.JSString as JS
 import qualified GHCJS.Foreign.Callback as J
 import qualified GHCJS.Types as J
 import qualified JavaScript.Extras as JE
-import JavaScript.Extras.JSRep.Unsafe ()
+import qualified JavaScript.Extras.JSVal.Unsafe ()
 
-test :: JE.JSRep -> IO ()
+test :: J.JSVal -> IO ()
 test x = do
     let str = show x
-        x' = read str :: JE.JSRep
+        x' = read str :: J.JSVal
         str' = show x'
     js_write $ "Test: " `mappend` (JS.pack str) `mappend` " == " `mappend` (JS.pack str')
 
@@ -23,9 +23,9 @@ main = do
     test js_int
     test js_obj
     cb <- J.syncCallback' (pure (JE.toJS js_int))
-    test (JE.JSRep (J.jsval cb))
+    test (J.jsval cb)
     J.releaseCallback cb
-    test (JE.JSRep (J.jsval cb))
+    test (J.jsval cb)
 
 foreign import javascript unsafe
   "document.write('<p>' + $1 + '</p>')"
@@ -33,11 +33,11 @@ foreign import javascript unsafe
 
 foreign import javascript unsafe
   "5"
-  js_int :: JE.JSRep
+  js_int :: J.JSVal
 
 foreign import javascript unsafe
   "{ 'hello': 'world' }"
-  js_obj :: JE.JSRep
+  js_obj :: J.JSVal
 
 #else
 

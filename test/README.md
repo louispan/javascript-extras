@@ -1,4 +1,12 @@
+# Preconditions
+install [stack](https://docs.haskellstack.org/en/stable/install_and_upgrade/)
+install [node](https://nodejs.org)
+install [ghcjs](https://github.com/ghcjs/ghcjs)
+
+# Finally, run test webpage
 ```
-make start
+cd test
+npm install
+./build.sh
+npx webpack-dev-server --open
 ```
-Then open browser to localhost:8080

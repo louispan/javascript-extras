@@ -1,3 +1,20 @@
+# os
+.DS_Store
+
+# stack
 .stack-work
-stack.ghcjs.yaml
-.build-ghcjs
+*.yaml.lock
+package-lock.json
+
+# cabal
+cabal.project.local
+dist-newstyle
+
+# shake
+.shake
+
+# node
+node_modules
+
+# other build
+dist
