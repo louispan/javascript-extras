@@ -1,0 +1,34 @@
+cabal-version:       2.2
+name:                javascript-extras-example
+version:             0.1.0.0
+synopsis:            Example of using javascript-extras
+description:         Example of using javascript-extras
+homepage:            https://github.com/louispan/javascript-extras/example#readme
+license:             BSD-3-Clause
+license-file:        LICENSE
+author:              Louis Pan
+maintainer:          louis@pan.me
+copyright:           2019 Louis Pan
+category:            Web
+build-type:          Simple
+extra-source-files:  README.md
+                   , package.json
+
+executable javascript-extras-example
+  hs-source-dirs:      hs
+  main-is:             Main.hs
+  ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-N
+  cpp-options:         -DGHCJS_BROWSER
+  build-depends:       base >= 4.7 && < 5
+                     , javascript-extras
+  default-language:    Haskell2010
+  default-extensions:  ApplicativeDo
+  if impl(ghcjs)
+    build-depends: ghcjs-base
+                 , ghcjs-prim >= 0.1
+  if !impl(ghcjs)
+    build-depends: ghcjs-base-stub >= 0.2
+
+source-repository head
+  type:     git
+  location: https://github.com/louispan/javascript-extras
