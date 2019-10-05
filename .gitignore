@@ -3,8 +3,6 @@
 
 # stack
 .stack-work
-*.yaml.lock
-package-lock.json
 
 # cabal
 cabal.project.local

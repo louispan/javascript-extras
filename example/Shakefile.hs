@@ -49,25 +49,29 @@ oracleProjectVersion = addOracle $ \(ProjectVersion _) -> do
 
 main :: IO ()
 main = shakeArgs shakeOptions $ do
-    getGhcjsVersion <- oracleGhcjsVersion
-    getProjectVersion <- oracleProjectVersion
-
     want [build </> "hsMain.js"]
 
     phony "clean" $ do
         putNormal $ "Deleting " <> build
         removeFilesAfter build ["//"]
 
-    project <> ".jsexe" </> "all.js" %> \_ -> do
-         alwaysRerun
-         cmd_ "cabal" ["v2-build", "--ghcjs", project]
-
-    build </> "hsMain.js" %> \out -> do
+    getGhcjsVersion <- oracleGhcjsVersion
+    getProjectVersion <- oracleProjectVersion
+    let getProjectJsexe = do
         ghcVer <- getGhcjsVersion $ GhcjsVersion ()
         projectVer <- getProjectVersion $ ProjectVersion ()
-        let jsexe = jsexePath ghcVer projectVer
-            alljs = jsexe </> "all.js"
-        src <- readFile' alljs
-        writeFile' out $ jsexeModule src
+        pure $ jsexePath ghcVer projectVer
+
+    build </> "hsMain.js" %> \out -> do
+        jsexe <- getProjectJsexe
+        let alljs = jsexe </> "all.js"
+        allsrc <- readFile' alljs
+        writeFile' out $ jsexeModule allsrc
+
+    jsexePath "*" "*" </> "all.js" %> \out -> do
+         alwaysRerun
+         putNormal $ "@@@@@@ compiling " <> out
+         cmd_ "cabal" ["v2-build", "--ghcjs", project]
+
   where
     build = shakeFiles shakeOptions

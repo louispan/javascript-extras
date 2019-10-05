@@ -1,11 +1,3 @@
-// Node module dependencies
-// Example package.json:
-// {
-//   "dependencies": {
-//     "javascript-stringify": "^1.6.0"
-//   }
-// }
-
 #include <ghcjs/rts.h>
 
 // zip list of string and JSVal to object, lists must have been completely forced first

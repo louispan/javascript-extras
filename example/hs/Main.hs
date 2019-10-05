@@ -22,17 +22,17 @@ main :: IO ()
 main = do
     test js_int
     test js_obj
-    cb <- J.syncCallback' (pure (JE.toJS js_int))
-    test (J.jsval cb)
-    J.releaseCallback cb
-    test (J.jsval cb)
+    -- cb <- J.syncCallback' (pure (JE.toJS js_int))
+    -- test (J.jsval cb)
+    -- J.releaseCallback cb
+    -- test (J.jsval cb)
 
 foreign import javascript unsafe
   "document.write('<p>' + $1 + '</p>')"
   js_write :: JS.JSString -> IO ()
 
 foreign import javascript unsafe
-  "5"
+  "675324"
   js_int :: J.JSVal
 
 foreign import javascript unsafe
