@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "start": "webpack-dev-server --display-error-details --progress --colors --open --config webpack.dev.js",
-    "build": "webpack --display-error-details --progress --colors --config webpack.dev.js"
+    "build": "webpack --display-error-details --progress --colors --config webpack.prod.js"
   },
   "devDependencies": {
     "closure-webpack-plugin": "^2.0.1",
