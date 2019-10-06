@@ -5,14 +5,15 @@ module.exports = {
     output: {
         filename: "bundle.js",
         publicPath: "/",
-        path: __dirname + "/dist"
+        path: __dirname + "/dist",
     },
     plugins: [
         new HtmlWebpackPlugin({
             title: 'javascript-extras',
+            favicon: 'assets/favicon.ico',
         })
     ],
     devServer: {
-        writeToDisk: true
-    }
+        writeToDisk: true,
+    },
 };

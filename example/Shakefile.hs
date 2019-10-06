@@ -49,11 +49,17 @@ oracleProjectVersion = addOracle $ \(ProjectVersion _) -> do
 
 main :: IO ()
 main = shakeArgs shakeOptions $ do
-    want [build </> "hsMain.js"]
+    want [build </> "hsMain.js", "npm install" ]
 
     phony "clean" $ do
         putNormal $ "Deleting " <> build
         removeFilesAfter build ["//"]
+
+    phony "npm install" $ do
+        changed <- needHasChanged [ "package.json", "../package.json" ]
+        case changed of
+            [] -> pure ()
+            _ -> cmd_ "npm install"
 
     getGhcjsVersion <- oracleGhcjsVersion
     getProjectVersion <- oracleProjectVersion

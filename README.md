@@ -2,6 +2,8 @@
 
 Extra javascript functions when using GHCJS
 
+Please have a look at [example README](https://github.com/louispan/javascript-extras/blob/master/example/README.md) for an example of how to bundle this in your web app.
+
 # Changelog
 
 * 0.6.0.0
