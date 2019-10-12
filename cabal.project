@@ -1,0 +1,9 @@
+-- don't include subdirectories
+packages: ./*.cabal
+optional-packages:
+
+source-repository-package
+    type: git
+    location: https://github.com/louispan/aeson-applicative.git
+    tag: HEAD
+

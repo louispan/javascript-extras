@@ -7,9 +7,10 @@ Please have a look at [example README](https://github.com/louispan/javascript-ex
 # Changelog
 
 * 0.6.0.0
-  - renamed `getProperty` and `setProperty` to `getPropertyIO` and `setPropertyIO`
+  - renamed `getProperty` and `setProperty` to `getPropertyIO` and `setPropertyIO`, and made the JVal to modify the first argument (better for mutating method)
   - Added instances for `Data.Aeson` and `Data.Aeson.Applicative`.
   - Removed JSRep; using orphan instances of JSVal instead.
+  - Using ghcjs-base-stub-0.3.0.0
 
 * 0.5.0.0
   - flipped the args of `getProperty` and `setProperty`

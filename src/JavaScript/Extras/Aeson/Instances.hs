@@ -6,7 +6,7 @@
 module JavaScript.Extras.Aeson.Instances where
 
 import Data.Aeson
-import Data.Aeson.Applicative
+-- import Data.Aeson.Applicative
 import qualified Data.Aeson.Encoding as E
 import qualified Data.JSString as J
 import qualified Data.JSString.Text as J
@@ -22,8 +22,8 @@ instance ToJSON J.JSString where
     toEncoding = E.text . J.textFromJSString
     {-# INLINE toEncoding #-}
 
-instance Applicative m => AToJSON m J.JSString where
-    atoEncoding = pure . toEncoding
+-- instance Applicative m => AToJSON m J.JSString where
+--     atoEncoding = pure . toEncoding
 
-instance Applicative m => AFromJSON m J.JSString where
-    aparseJSON = fmap pure . parseJSON
+-- instance Applicative m => AFromJSON m J.JSString where
+--     aparseJSON = fmap pure . parseJSON

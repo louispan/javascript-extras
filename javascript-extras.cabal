@@ -1,6 +1,6 @@
 cabal-version:       2.2
 name:                javascript-extras
-version:             0.6.0.0
+version:             0.7.0.0
 synopsis:            Extra javascript functions when using GHCJS
 description:         Extra javascript functions when using GHCJS. Please see at README.md.
 homepage:            https://github.com/louispan/javascript-extras#readme
@@ -15,6 +15,7 @@ extra-source-files:  README.md
                    , package.json
 
 library
+  default-language:    Haskell2010
   hs-source-dirs:      src
   js-sources:          jsbits/javascript-extras.js
   exposed-modules:     JavaScript.Extras
@@ -30,16 +31,11 @@ library
                      , aeson-applicative >= 1.4
                      , deepseq >= 1.4
                      , hashable >= 1.2
+                     , ghcjs-base-stub >= 0.3
                      , lens >= 4.14
                      , newtype-generics >= 0.5
                      , parallel >= 3.2
                      , text >= 1.2
-  default-language:    Haskell2010
-  ghc-options:         -Wall
-  if impl(ghcjs)
-    build-depends: ghcjs-base
-  if !impl(ghcjs)
-    build-depends: ghcjs-base-stub >= 0.2
 
 source-repository head
   type:     git
