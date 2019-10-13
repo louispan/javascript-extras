@@ -58,9 +58,6 @@ oracleProjectVersion = addOracle $ \(ProjectVersion project) -> do
     desc <- liftIO $ D.readGenericPackageDescription D.normal $ project <.> "cabal"
     pure $ D.prettyShow $ D.pkgVersion $ D.package $ D.packageDescription desc
 
-trackFiles :: Foldable t => t FilePath -> Action ()
-trackFiles ls = withTempFile $ \f -> traverse_ (`copyFile'` f) ls
-
 main :: IO ()
 main = shakeArgs shakeOptions $ do
 
@@ -78,7 +75,7 @@ main = shakeArgs shakeOptions $ do
     "node_modules/.npm_install.done" %> \_ -> do
         npm_install "once only"
         Stdout ls <- cmd "find node_modules -name package.json"
-        trackFiles $ words ls
+        need $ words ls
         copyFile' "package.json" "node_modules/.npm_install.done"
 
     getGhcjsVersion <- oracleGhcjsVersion
