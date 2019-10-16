@@ -31,6 +31,7 @@ executable build
   ghc-options:         -Wall -threaded -rtsopts -with-rtsopts=-I0
   build-depends:       base >= 4.7 && < 5
                      , binary
+                     , bytestring
                      , Cabal
                      , deepseq
                      , directory

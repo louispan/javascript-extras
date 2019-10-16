@@ -7,9 +7,9 @@
 
 module JavaScript.Extras.Cast
     ( ToJS(..)
-    , toJS_
+    , _toJS
     , FromJS(..)
-    , fromJS_
+    , _fromJS
     ) where
 
 import Control.Lens
@@ -32,7 +32,7 @@ import qualified JavaScript.Object.Internal as JOI
 --
 -- The other reason for this class is while GHCJS base provide both IsJSVal and PToJSVal to convert to jsval,
 -- some types are instances of one or the other class.
--- This means you can't use the "Maybe a" instance of PToJSVal if it contains IsISJVal but not pToJSVal.
+-- This means you can't use the "Maybe a" instance of PToJSVal if it contains IsJSVal but not pToJSVal.
 class ToJS a where
     -- | This is a pure conversion, so instances must be able to convert
     -- the same or equivalent JSVal each time.
@@ -82,8 +82,8 @@ instance ToJS a => ToJS (Maybe a) where
     toJS Nothing  = J.nullRef
     toJS (Just a) = toJS a
 
-toJS_ :: ToJS a => Getting J.JSVal a J.JSVal
-toJS_ = to toJS
+_toJS :: (ToJS a, Profunctor p, Contravariant f) => Optic' p f a J.JSVal
+_toJS = to toJS
 
 -- | This provides a consistent way to safely convert from JSVal.
 -- The semantics is that if the return value is a Just, then the JSVal is not a null value.
@@ -208,8 +208,8 @@ instance FromJS J.JSString where
     fromJS a | validInstance @J.JSString a = J.pFromJSVal a
     fromJS _ = Nothing
 
-fromJS_ :: FromJS a => Getting (Maybe a) J.JSVal (Maybe a)
-fromJS_ = to fromJS
+_fromJS :: (FromJS a, Profunctor p, Contravariant f) => Optic' p f J.JSVal (Maybe a)
+_fromJS = to fromJS
 
 #ifdef __GHCJS__
 

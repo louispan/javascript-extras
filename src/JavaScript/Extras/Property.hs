@@ -4,13 +4,14 @@
 {-# LANGUAGE TupleSections #-}
 
 module JavaScript.Extras.Property
-    ( getPropertyIO
-    , setPropertyIO
+    ( getProperty
+    , setProperty
     , propertiesToObject
     , objectToProperties
     ) where
 
 import Control.DeepSeq
+import Control.Monad.IO.Class
 import Control.Parallel
 import qualified GHC.Exts as Exts
 import qualified GHCJS.Marshal.Pure as J
@@ -26,22 +27,22 @@ import Unsafe.Coerce
 -- classNames = JE.toJSRep . JS.unwords . fmap fst . filter snd
 
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
-getPropertyIO :: JE.ToJS j => j -> J.JSString -> IO J.JSVal
-getPropertyIO j k =
+getProperty :: (MonadIO m, JE.ToJS j) => j -> J.JSString -> m J.JSVal
+getProperty j k =
     if J.isUndefined x || J.isNull x
         || J.isUndefined k' || J.isNull k'
     then pure $ J.nullRef
-    else js_unsafeGetProperty x k
+    else liftIO $ js_unsafeGetProperty x k
   where
     k' = J.pToJSVal k
     x = JE.toJS j
 -- | set a property of any JSVal
-setPropertyIO :: JE.ToJS j => j -> (J.JSString, J.JSVal) -> IO ()
-setPropertyIO j (k, v) =
+setProperty :: (MonadIO m, JE.ToJS j) => j -> (J.JSString, J.JSVal) -> m ()
+setProperty j (k, v) =
     if J.isUndefined x || J.isNull x
         || J.isUndefined k' || J.isNull k'
     then pure ()
-    else js_unsafeSetProperty x k v
+    else liftIO $ js_unsafeSetProperty x k v
   where
     k' = J.pToJSVal k
     x = JE.toJS j
