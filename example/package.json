@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "javascript-extras": "file:.."
+    "javascript-extras": "louispan/javascript-extras"
   },
   "sideEffects": [
     "./src/index.js"

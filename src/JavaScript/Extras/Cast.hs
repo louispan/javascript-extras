@@ -2,6 +2,7 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE DefaultSignatures #-}
 {-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
 
@@ -10,6 +11,8 @@ module JavaScript.Extras.Cast
     , _toJS
     , FromJS(..)
     , _fromJS
+    , viaJS
+    , _viaJS
     ) where
 
 import Control.Lens
@@ -210,6 +213,12 @@ instance FromJS J.JSString where
 
 _fromJS :: (FromJS a, Profunctor p, Contravariant f) => Optic' p f J.JSVal (Maybe a)
 _fromJS = to fromJS
+
+viaJS :: forall a b. (ToJS b, FromJS a) => b -> Maybe a
+viaJS = fromJS . toJS
+
+_viaJS :: forall a b f p. (ToJS b, FromJS a, Profunctor p, Contravariant f) => Optic' p f b (Maybe a)
+_viaJS = to viaJS
 
 #ifdef __GHCJS__
 

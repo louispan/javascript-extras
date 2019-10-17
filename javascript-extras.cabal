@@ -22,6 +22,7 @@ library
   exposed-modules:     JavaScript.Extras
                        JavaScript.Extras.Aeson.Instances
                        JavaScript.Extras.Cast
+                       JavaScript.Extras.JSString
                        JavaScript.Extras.JSString.Instances
                        JavaScript.Extras.JSVal.Instances
                        JavaScript.Extras.JSVal.Unsafe
