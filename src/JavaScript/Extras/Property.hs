@@ -21,11 +21,6 @@ import qualified JavaScript.Object as JO
 import qualified JavaScript.Object.Internal as JOI
 import Unsafe.Coerce
 
--- -- | Creates a JE.JSRep single string for "className" property from a list of (JSString, Bool)
--- -- Idea from https://github.com/JedWatson/classnames
--- classNames :: [(J.JSString, Bool)] -> JE.JSRep
--- classNames = JE.toJSRep . JS.unwords . fmap fst . filter snd
-
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
 getProperty :: (MonadIO m, JE.ToJS j) => j -> J.JSString -> m J.JSVal
 getProperty j k =
