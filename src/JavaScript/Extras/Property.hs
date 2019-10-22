@@ -32,8 +32,8 @@ getProperty j k =
     k' = J.pToJSVal k
     x = JE.toJS j
 -- | set a property of any JSVal
-setProperty :: (MonadIO m, JE.ToJS j) => j -> (J.JSString, J.JSVal) -> m ()
-setProperty j (k, v) =
+setProperty :: (MonadIO m, JE.ToJS j) => j -> J.JSString -> J.JSVal -> m ()
+setProperty j k v =
     if J.isUndefined x || J.isNull x
         || J.isUndefined k' || J.isNull k'
     then pure ()
