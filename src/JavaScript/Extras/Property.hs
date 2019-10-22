@@ -4,7 +4,10 @@
 {-# LANGUAGE TupleSections #-}
 
 module JavaScript.Extras.Property
-    ( getProperty
+    ( JO.Object
+    , createObject
+    , deleteProperty
+    , getProperty
     , setProperty
     , propertiesToObject
     , objectToProperties
@@ -20,6 +23,19 @@ import qualified JavaScript.Extras.Cast as JE
 import qualified JavaScript.Object as JO
 import qualified JavaScript.Object.Internal as JOI
 import Unsafe.Coerce
+
+createObject :: MonadIO m => m JO.Object
+createObject = liftIO $ JO.create
+
+deleteProperty :: (MonadIO m, JE.ToJS j) => j -> J.JSString -> m ()
+deleteProperty j k =
+    if J.isUndefined x || J.isNull x
+        || J.isUndefined k' || J.isNull k'
+    then pure ()
+    else liftIO $ js_unsafeDeleteProperty x k
+  where
+    k' = J.pToJSVal k
+    x = JE.toJS j
 
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
 getProperty :: (MonadIO m, JE.ToJS j) => j -> J.JSString -> m J.JSVal
@@ -57,6 +73,11 @@ objectToProperties obj = do
 
 -- | throws an exception if undefined or null
 foreign import javascript unsafe
+  "delete $1[$2];"
+  js_unsafeDeleteProperty :: J.JSVal -> J.JSString -> IO ()
+
+-- | throws an exception if undefined or null
+foreign import javascript unsafe
   "$1[$2]"
   js_unsafeGetProperty :: J.JSVal -> J.JSString -> IO J.JSVal
 
@@ -68,10 +89,14 @@ foreign import javascript unsafe
 -- | zip list of string and JSVal to object, lists must have been completely forced first
 -- Using the idea from JavaScript.Array.Internal.fromList h$fromHsListJSVal
 foreign import javascript unsafe
-  "hje$fromHsZipListJSVal($1, $2)"
+  "$r = hje$fromHsZipListJSVal($1, $2);"
   js_toJSObjectPure :: Exts.Any -> Exts.Any -> JO.Object
 
 #else
+
+-- | throws an exception if undefined or null
+js_unsafeDeleteProperty :: J.JSVal -> J.JSString -> IO ()
+js_unsafeDeleteProperty _ _ = pure ()
 
 -- | throws an exception if undefined or null
 js_unsafeGetProperty :: J.JSVal -> J.JSString -> IO J.JSVal
