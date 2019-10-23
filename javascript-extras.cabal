@@ -1,6 +1,6 @@
 cabal-version:       2.2
 name:                javascript-extras
-version:             0.6.0.0
+version:             0.7.0.0
 synopsis:            Extra javascript functions when using GHCJS
 description:         Extra javascript functions when using GHCJS. Please see at README.md.
 homepage:            https://github.com/louispan/javascript-extras#readme

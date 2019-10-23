@@ -29,8 +29,7 @@ createObject = liftIO $ JO.create
 
 deleteProperty :: (MonadIO m, JE.ToJS j) => j -> J.JSString -> m ()
 deleteProperty j k =
-    if J.isUndefined x || J.isNull x
-        || J.isUndefined k' || J.isNull k'
+    if js_isInvalid x || js_isInvalid k'
     then pure ()
     else liftIO $ js_unsafeDeleteProperty x k
   where
@@ -40,18 +39,17 @@ deleteProperty j k =
 -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
 getProperty :: (MonadIO m, JE.ToJS j) => j -> J.JSString -> m J.JSVal
 getProperty j k =
-    if J.isUndefined x || J.isNull x
-        || J.isUndefined k' || J.isNull k'
+    if js_isInvalid x || js_isInvalid k'
     then pure $ J.nullRef
     else liftIO $ js_unsafeGetProperty x k
   where
     k' = J.pToJSVal k
     x = JE.toJS j
+
 -- | set a property of any JSVal
 setProperty :: (MonadIO m, JE.ToJS j) => j -> J.JSString -> J.JSVal -> m ()
 setProperty j k v =
-    if J.isUndefined x || J.isNull x
-        || J.isUndefined k' || J.isNull k'
+    if js_isInvalid x || js_isInvalid k'
     then pure ()
     else liftIO $ js_unsafeSetProperty x k v
   where
@@ -70,6 +68,10 @@ objectToProperties obj = do
    traverse (\k -> (\v -> (k, v)) <$> JO.unsafeGetProp k obj) props
 
 #ifdef __GHCJS__
+
+foreign import javascript unsafe
+  "typeof $1 === 'undefined' && $1 === null"
+  js_isInvalid :: J.JSVal -> Bool
 
 -- | throws an exception if undefined or null
 foreign import javascript unsafe
@@ -93,6 +95,10 @@ foreign import javascript unsafe
   js_toJSObjectPure :: Exts.Any -> Exts.Any -> JO.Object
 
 #else
+
+-- | throws an exception if undefined or null
+js_isInvalid :: J.JSVal -> Bool
+js_isInvalid _ = False
 
 -- | throws an exception if undefined or null
 js_unsafeDeleteProperty :: J.JSVal -> J.JSString -> IO ()

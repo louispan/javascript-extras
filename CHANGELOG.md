@@ -1,7 +1,11 @@
 # Changelog
 
+* 0.7.0.0
+  - `setProperty` uses two arguments instead of a tuple
+  - Changed semantics of 'FromJS' for 'JSVal' and 'ToJS/FromJS' for 'Maybe a' to make them symmetric
+
 * 0.6.0.0
-  - Made `getProperty` and `setProperty` made the JVal to modify the first argument (better for mutations under the IO monad)
+  - `getProperty` and `setProperty` argument order has the JVal to modify the first argument (better for mutations under the IO monad)
   - Added instances for `Data.Aeson` and `Data.Aeson.Applicative`.
   - Removed JSRep; using orphan instances of JSVal instead.
   - Using ghcjs-base-stub-0.3.0.0
