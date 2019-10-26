@@ -47,8 +47,12 @@ getProperty j k =
     x = JE.toJS j
 
 -- | set a property of any JSVal
-setProperty :: (MonadIO m, JE.ToJS j) => j -> J.JSString -> J.JSVal -> m ()
-setProperty j k v =
+-- 2nd arg is a tuple to allow
+-- @
+-- f `setProperty` (k, v)
+-- @
+setProperty :: (MonadIO m, JE.ToJS j) => j -> (J.JSString, J.JSVal) -> m ()
+setProperty j (k, v) =
     if js_isInvalid x || js_isInvalid k'
     then pure ()
     else liftIO $ js_unsafeSetProperty x k v

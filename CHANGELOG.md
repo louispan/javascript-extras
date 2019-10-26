@@ -1,5 +1,8 @@
 # Changelog
 
+* 0.8.0.0
+  - `setProperty` uses a tuple again
+
 * 0.7.0.0
   - `setProperty` uses two arguments instead of a tuple
   - Changed semantics of 'FromJS' for 'JSVal' and 'ToJS/FromJS' for 'Maybe a' to make them symmetric

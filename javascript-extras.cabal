@@ -10,6 +10,7 @@ author:              Louis Pan
 maintainer:          louis@pan.me
 copyright:           2019 Louis Pan
 category:            Web
+stability:           experimental
 build-type:          Simple
 extra-source-files:  README.md
                    , CHANGELOG.md
