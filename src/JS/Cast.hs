@@ -6,7 +6,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
 
-module JavaScript.Extras.Cast
+module JS.Cast
     ( ToJS(..)
     , _toJS
     , FromJS(..)
@@ -26,8 +26,9 @@ import qualified GHCJS.Foreign.Export as J
 import qualified GHCJS.Foreign.Internal as JFI
 import qualified GHCJS.Marshal.Pure as J
 import qualified GHCJS.Types as J
-import qualified JavaScript.Array.Internal as JAI
-import qualified JavaScript.Object.Internal as JOI
+-- import qualified JavaScript.Array.Internal as JAI
+-- import qualified JavaScript.Object.Internal as JOI
+
 
 -- | This provides a consistent way to convert to JSVal, with different semantics for Char.
 -- In the Char's instance of ToJS, it converts to a string instead of integer - IMHO this is less surprising.
@@ -53,8 +54,8 @@ instance ToJS () where
     toJS _ = J.jsval $ JS.pack "()" -- ugly hack, actually a string
 instance ToJS (J.Callback a)
 instance ToJS (J.Export a)
-instance ToJS (JAI.SomeJSArray m)
-instance ToJS JOI.Object
+-- instance ToJS (JAI.SomeJSArray m)
+-- instance ToJS JOI.Object
 instance ToJS Bool where
     toJS = J.pToJSVal
 -- | Char instance converts to string
@@ -142,15 +143,15 @@ instance FromJS a => FromJS (Maybe a) where
             _ -> Nothing
         else Nothing
 
-instance FromJS (JAI.SomeJSArray m) where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONArray
-    fromJS a | validFromJS @(JAI.SomeJSArray m) a = Just $ JAI.SomeJSArray a
-    fromJS _ = Nothing
+-- instance FromJS (JAI.SomeJSArray m) where
+--     validFromJS a = JFI.jsonTypeOf a == JFI.JSONArray
+--     fromJS a | validFromJS @(JAI.SomeJSArray m) a = Just $ JAI.SomeJSArray a
+--     fromJS _ = Nothing
 
-instance FromJS JOI.Object where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONObject
-    fromJS a | validFromJS @(JOI.Object) a = Just $ JOI.Object a
-    fromJS _ = Nothing
+-- instance FromJS JOI.Object where
+--     validFromJS a = JFI.jsonTypeOf a == JFI.JSONObject
+--     fromJS a | validFromJS @(JOI.Object) a = Just $ JOI.Object a
+--     fromJS _ = Nothing
 
 instance FromJS Bool where
     validFromJS a = JFI.jsonTypeOf a == JFI.JSONBool

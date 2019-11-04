@@ -3,7 +3,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 
-module JavaScript.Extras.Aeson.Instances where
+module JS.Aeson.Instances where
 
 import Data.Aeson
 -- import Data.Aeson.Applicative

@@ -1,5 +1,10 @@
 # Changelog
 
+* 1.0.0.0
+  - changed namespace from JavaScript to JS
+  - changed goal to be an opinionated JS prelude instead of ghcjs-base
+  - setProperty, etc are now part of an IObject class; also fix is_invalid bug
+
 * 0.8.0.0
   - `setProperty` uses a tuple again
 

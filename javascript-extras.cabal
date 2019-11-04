@@ -1,6 +1,6 @@
 cabal-version:       2.2
 name:                javascript-extras
-version:             0.7.0.0
+version:             1.0.0.0
 synopsis:            Extra javascript functions when using GHCJS
 description:         Extra javascript functions when using GHCJS. Please see at README.md.
 homepage:            https://github.com/louispan/javascript-extras#readme
@@ -20,15 +20,15 @@ library
   default-language:    Haskell2010
   hs-source-dirs:      src
   js-sources:          jsbits/javascript-extras.js
-  exposed-modules:     JavaScript.Extras
-                       JavaScript.Extras.Aeson.Instances
-                       JavaScript.Extras.Cast
-                       JavaScript.Extras.JSString
-                       JavaScript.Extras.JSString.Instances
-                       JavaScript.Extras.JSVal.Instances
-                       JavaScript.Extras.JSVal.Unsafe
-                       JavaScript.Extras.Number
-                       JavaScript.Extras.Property
+  exposed-modules:     JS
+                       JS.Aeson.Instances
+                       JS.Cast
+                       JS.Types
+                       JS.Data
+                       JS.Data.Instances
+                       JS.Data.Object
+                       JS.Data.Object.Internal
+                       JS.Data.Unsafe
   build-depends:       base >= 4.7 && < 5
                      , aeson >= 1.4.2
                      , aeson-applicative >= 1.4
