@@ -87,7 +87,7 @@ foreign import javascript unsafe
 
 foreign import javascript unsafe
   "$r = {};"
-  js_mkObject :: IO Object
+  js_mkObject :: IO JSObject
 
 foreign import javascript unsafe
   "Object.entries($1)"

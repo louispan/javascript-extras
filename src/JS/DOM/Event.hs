@@ -23,6 +23,8 @@ class IObject j => IEvent j where
     cancelable :: j -> Bool
     cancelable =  js_cancelable . toJS
 
+    -- | where the event listener is attached to
+    -- Changes as the event propages, eventually becoming null
     currentTarget :: MonadIO m => j -> m (Maybe EventTarget)
     currentTarget = liftIO . fmap (fromJS @EventTarget) . js_currentTarget . toJS
 
@@ -35,8 +37,10 @@ class IObject j => IEvent j where
     isTrusted :: j -> Bool
     isTrusted = js_isTrusted . toJS
 
-    target :: MonadIO m => j -> m (Maybe EventTarget)
-    target = liftIO . fmap (fromJS @EventTarget) . js_target . toJS
+    -- | There is always be a valid EventTarget
+    -- The originator of the event
+    target :: MonadIO m => j -> m EventTarget
+    target = liftIO . js_target . toJS
 
     timeStamp :: j -> Int
     timeStamp = js_timeStamp . toJS
@@ -81,7 +85,7 @@ foreign import javascript unsafe
 
 foreign import javascript unsafe
     "$1.target"
-    js_target :: JSVal -> IO JSVal
+    js_target :: JSVal -> IO EventTarget
 
 foreign import javascript unsafe
     "$1.timeStamp"
@@ -119,8 +123,8 @@ js_eventPhase _ = pure 0
 js_isTrusted:: JSVal -> Bool
 js_isTrusted _ = False
 
-js_target :: JSVal -> IO JSVal
-js_target _ = pure nullRef
+js_target :: JSVal -> IO EventTarget
+js_target _ = pure $ EventTarget nullRef
 
 js_timeStamp :: JSVal -> Int
 js_timeStamp _ = 0
