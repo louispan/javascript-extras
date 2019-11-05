@@ -5,27 +5,25 @@ module Main (main) where
 
 #ifdef __GHCJS__
 
-import qualified Data.JSString as JS
-import qualified GHCJS.Foreign.Callback as J
-import qualified GHCJS.Types as J
-import qualified JavaScript.Extras as JE
-import qualified JavaScript.Extras.JSVal.Unsafe ()
+import qualified Data.JSString as J
+import qualified JS.Data
+import qualified JS.Data.Unsafe ()
 
-test :: J.JSVal -> IO ()
+test :: JSVal -> IO ()
 test x = do
     let str = show x
-        x' = read str :: J.JSVal
+        x' = read str :: JSVal
         str' = show x'
-    js_write $ "Test: " `mappend` (JS.pack str) `mappend` " == " `mappend` (JS.pack str')
+    js_write $ "Test: " `mappend` (J.pack str) `mappend` " == " `mappend` (J.pack str')
 
 main :: IO ()
 main = do
     test js_int
     test js_obj
-    cb <- J.syncCallback' (pure (JE.toJS js_int))
-    test (J.jsval cb)
-    J.releaseCallback cb
-    test (J.jsval cb)
+    cb <- syncCallback' (pure (toJS js_int))
+    test (jsval cb)
+    releaseCallback cb
+    test (jsval cb)
 
 foreign import javascript unsafe
   "document.write('<p>' + $1 + '</p>')"
@@ -33,11 +31,11 @@ foreign import javascript unsafe
 
 foreign import javascript unsafe
   "675324"
-  js_int :: J.JSVal
+  js_int :: JSVal
 
 foreign import javascript unsafe
   "{ 'hello': 'world' }"
-  js_obj :: J.JSVal
+  js_obj :: JSVal
 
 #else
 

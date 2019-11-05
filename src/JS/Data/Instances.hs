@@ -7,7 +7,7 @@ import Data.Hashable
 import qualified Data.JSString as J
 import Data.String
 import GHCJS.Types
-import JS.Cast
+import JS.Data.Cast
 
 instance Hashable JSString where
     hashWithSalt s x = hashWithSalt s (J.unpack x)

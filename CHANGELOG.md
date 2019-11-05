@@ -4,6 +4,7 @@
   - changed namespace from JavaScript to JS
   - changed goal to be an opinionated JS prelude instead of ghcjs-base
   - setProperty, etc are now part of an IObject class; also fix is_invalid bug
+  - moved DOM from glazier-react to here
 
 * 0.8.0.0
   - `setProperty` uses a tuple again

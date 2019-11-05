@@ -6,7 +6,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeApplications #-}
 
-module JS.Cast
+module JS.Data.Cast
     ( ToJS(..)
     , _toJS
     , FromJS(..)
@@ -26,7 +26,7 @@ import qualified GHCJS.Foreign.Export as J
 import qualified GHCJS.Foreign.Internal as JFI
 import qualified GHCJS.Marshal.Pure as J
 import qualified GHCJS.Types as J
--- import qualified JavaScript.Array.Internal as JAI
+import qualified JavaScript.Array.Internal as JAI
 -- import qualified JavaScript.Object.Internal as JOI
 
 
@@ -49,6 +49,9 @@ instance ToJS J.JSVal where
 instance ToJS a => ToJS (Maybe a) where
     toJS Nothing = js_nothing
     toJS (Just a) = js_just (toJS a)
+
+instance {-# OVERLAPPABLE #-} ToJS a => ToJS [a] where
+    toJS xs = J.jsval (JAI.fromList (toJS <$> xs))
 
 instance ToJS () where
     toJS _ = J.jsval $ JS.pack "()" -- ugly hack, actually a string
@@ -83,7 +86,7 @@ instance ToJS Word32 where
     toJS = J.pToJSVal
 instance ToJS T.Text where
     toJS = J.pToJSVal
-instance ToJS String where
+instance {-# OVERLAPPING #-} ToJS String where
     toJS = J.pToJSVal
 instance ToJS J.JSString
 
@@ -141,6 +144,13 @@ instance FromJS a => FromJS (Maybe a) where
                 Nothing -> Nothing
                 Just a -> Just (Just a)
             _ -> Nothing
+        else Nothing
+
+-- | Returns nothing if any element fails
+instance {-# OVERLAPPABLE #-} FromJS a => FromJS [a] where
+    validFromJS a = isJust (fromJS @(Maybe a) a)
+    fromJS a = if js_isArray a
+        then sequenceA (fromJS <$> (JAI.toList (JAI.SomeJSArray a)))
         else Nothing
 
 -- instance FromJS (JAI.SomeJSArray m) where
@@ -231,7 +241,7 @@ instance FromJS T.Text where
     fromJS a | validFromJS @T.Text a = J.pFromJSVal a
     fromJS _ = Nothing
 
-instance FromJS String where
+instance {-# OVERLAPPING #-} FromJS String where
     validFromJS a = JFI.jsonTypeOf a == JFI.JSONString
     fromJS a | validFromJS @String a = J.pFromJSVal a
     fromJS _ = Nothing

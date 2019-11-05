@@ -20,15 +20,36 @@ library
   default-language:    Haskell2010
   hs-source-dirs:      src
   js-sources:          jsbits/javascript-extras.js
-  exposed-modules:     JS
-                       JS.Aeson.Instances
-                       JS.Cast
-                       JS.Types
+  exposed-modules:     JS.Aeson.Instances
                        JS.Data
+                       JS.Data.Cast
                        JS.Data.Instances
                        JS.Data.Object
                        JS.Data.Object.Internal
                        JS.Data.Unsafe
+                       JS.DOM
+                       JS.DOM.Event
+                       JS.DOM.Event.Internal
+                       JS.DOM.Event.UI
+                       JS.DOM.Event.UI.Internal
+                       JS.DOM.Event.UI.Keyboard
+                       JS.DOM.Event.UI.Keyboard.Internal
+                       JS.DOM.Event.UI.Mouse
+                       JS.DOM.Event.UI.Mouse.Internal
+                       JS.DOM.Event.HashChange
+                       JS.DOM.Event.HashChange.Internal
+                       JS.DOM.EventTarget
+                       JS.DOM.EventTarget.Internal
+                       JS.DOM.EventTarget.Node
+                       JS.DOM.EventTarget.Node.Internal
+                       JS.DOM.EventTarget.Node.Document
+                       JS.DOM.EventTarget.Node.Document.Internal
+                       JS.DOM.EventTarget.Node.Element
+                       JS.DOM.EventTarget.Node.Element.Internal
+                       JS.DOM.EventTarget.Node.Element.HTML
+                       JS.DOM.EventTarget.Node.Element.HTML.Internal
+                       JS.DOM.EventTarget.Window
+                       JS.DOM.EventTarget.Window.Internal
   build-depends:       base >= 4.7 && < 5
                      , aeson >= 1.4.2
                      , aeson-applicative >= 1.4

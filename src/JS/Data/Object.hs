@@ -6,22 +6,49 @@
 module JS.Data.Object
     ( JSObject
     , mkObject
+    , globalThis
+    , object_entries
+    , object_fromEntries
     , IObject(..)
     ) where
 
 import Control.DeepSeq
 import Control.Monad.IO.Class
 import GHCJS.Types
-import qualified JavaScript.Object as JO
-import qualified JavaScript.Object.Internal as JOI
-import JS.Cast
+import qualified JavaScript.Array.Internal as JAI
+import JS.Data.Cast
 import JS.Data.Object.Internal
 import Unsafe.Coerce
+
+-- | https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis
+globalThis :: JSObject
+globalThis = JSObject js_globalThis
+
+mkObject :: MonadIO m => m JSObject
+mkObject = liftIO js_mkObject
+
+-- | https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object
+object_entries :: (MonadIO m, IObject j) => j -> m [(JSVal, JSVal)]
+object_entries o = liftIO $ (fmap f . JAI.toList . JAI.SomeJSArray) <$> js_object_entries (toJS o)
+  where
+    g :: [JSVal] -> (JSVal, JSVal)
+    g [k, v] = (k, v)
+    g _ = error "Object entries didn't return pair"
+    f :: JSVal -> (JSVal, JSVal)
+    f j = g $ JAI.toList $ JAI.SomeJSArray j
+
+object_fromEntries :: (MonadIO m) => [(JSVal, JSVal)] -> m JSObject
+object_fromEntries xs = liftIO $ js_object_fromEntries xs'
+  where
+    xs' = jsval $ JAI.fromList $ (g . f) <$> xs
+    f :: (JSVal, JSVal) -> [JSVal]
+    f (k, v) = [k, v]
+    g :: [JSVal] -> JSVal
+    g ys = jsval (JAI.fromList ys)
 
 -- Subset of https://developer.mozilla.org/en-US/docs/Web/API/Event
 -- Not providing @isPropagationStopped@ as it is not supported natively by JavaScript
 class ToJS j => IObject j where
-
     -- | get a property of any JSVal. If a null or undefined is queried, the result will also be null
     getProperty :: (MonadIO m, ToJS s) => j -> s -> m JSVal
     getProperty j k =
@@ -55,6 +82,22 @@ instance IObject JSObject
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
+  "globalThis"
+  js_globalThis :: JSVal
+
+foreign import javascript unsafe
+  "$r = {};"
+  js_mkObject :: IO Object
+
+foreign import javascript unsafe
+  "Object.entries($1)"
+  js_object_entries :: JSVal -> IO JSVal
+
+foreign import javascript unsafe
+  "Object.fromEntries($1)"
+  js_object_fromEntries :: JSVal -> IO JSObject
+
+foreign import javascript unsafe
   "typeof $1 === 'undefined' || $1 === null"
   js_isInvalid :: JSVal -> Bool
 
@@ -73,13 +116,20 @@ foreign import javascript unsafe
   "$1[$2] = $3;"
   js_unsafeSetProperty :: JSVal -> JSVal -> JSVal -> IO ()
 
--- | zip list of string and JSVal to object, lists must have been completely forced first
--- Using the idea from JavaScript.Array.Internal.fromList h$fromHsListJSVal
-foreign import javascript unsafe
-  "$r = hje$fromHsZipListJSVal($1, $2);"
-  js_toJSObjectPure :: Exts.Any -> Exts.Any -> JO.Object
-
 #else
+
+js_globalThis :: JSVal
+js_globalThis = nullRef
+
+js_mkObject :: IO JSObject
+js_mkObject = pure $ JSObject nullRef
+
+js_object_fromEntries :: JSVal -> IO JSObject
+js_object_fromEntries _ = pure $ JSObject nullRef
+
+-- | throws an exception if undefined or null
+js_object_entries :: JSVal -> IO JSVal
+js_object_entries _ = pure nullRef
 
 -- | throws an exception if undefined or null
 js_isInvalid :: JSVal -> Bool
