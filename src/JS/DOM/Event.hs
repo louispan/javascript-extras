@@ -1,5 +1,7 @@
 {-# LANGUAGE CPP #-}
 
+{-# LANGUAGE TypeApplications #-}
+
 module JS.DOM.Event
     ( -- | constructor is not exported
       Event
@@ -21,8 +23,8 @@ class IObject j => IEvent j where
     cancelable :: j -> Bool
     cancelable =  js_cancelable . toJS
 
-    currentTarget :: MonadIO m => j -> m EventTarget
-    currentTarget = liftIO . fmap EventTarget . js_currentTarget . toJS
+    currentTarget :: MonadIO m => j -> m (Maybe EventTarget)
+    currentTarget = liftIO . fmap (fromJS @EventTarget) . js_currentTarget . toJS
 
     defaultPrevented  :: MonadIO m => j -> m Bool
     defaultPrevented = liftIO . js_defaultPrevented . toJS
@@ -33,8 +35,8 @@ class IObject j => IEvent j where
     isTrusted :: j -> Bool
     isTrusted = js_isTrusted . toJS
 
-    target :: MonadIO m => j -> m EventTarget
-    target = liftIO . fmap EventTarget . js_target . toJS
+    target :: MonadIO m => j -> m (Maybe EventTarget)
+    target = liftIO . fmap (fromJS @EventTarget) . js_target . toJS
 
     timeStamp :: j -> Int
     timeStamp = js_timeStamp . toJS

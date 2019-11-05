@@ -20,23 +20,14 @@ class IEventTarget j => IWindow j where
 
 instance IWindow Window
 
--- globalWindow :: Maybe Window
--- globalWindow = fromJS js_window
-
 #ifdef __GHCJS__
 
--- foreign import javascript unsafe
---     "$r = globalThis.window"
---     js_window :: J.JSVal
 
 foreign import javascript unsafe
     "$1.document"
     js_document :: JSVal -> IO JSVal
 
 #else
-
--- js_window :: J.JSVal
--- js_window = J.nullRef
 
 js_document :: JSVal -> IO JSVal
 js_document _ = pure nullRef
