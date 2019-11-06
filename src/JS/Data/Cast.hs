@@ -263,59 +263,59 @@ _viaJS = to viaJS
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "[]"
+    "$r = [];"
     js_nothing :: J.JSVal
 
 foreign import javascript unsafe
-    "[$1]"
+    "$r = [$1];"
     js_just :: J.JSVal -> J.JSVal
 
 foreign import javascript unsafe
-    "typeof $1 === 'object' && typeof $1.length === 'number'"
+    "$r = typeof $1 === 'object' && typeof $1.length === 'number';"
     js_isArray :: J.JSVal -> Bool
 
 foreign import javascript unsafe
-    "$1.length"
+    "$r = $1.length;"
     js_unsafeLength :: J.JSVal -> Int
 
 foreign import javascript unsafe
-    "$1[0]"
+    "$r = $1[0];"
     js_unsafeHead :: J.JSVal -> J.JSVal
 
 foreign import javascript unsafe
-    "typeof $1 === 'string' && $1 === '()'"
+    "$r = typeof $1 === 'string' && $1 === '()';"
     js_isValidUnit :: J.JSVal -> Bool
 
 foreign import javascript unsafe
-    "($1 >= $2) || ($1 <= $3)"
+    "$r = ($1 >= $2) || ($1 <= $3);"
     js_withinIntBounds :: J.JSVal -> Int -> Int -> Bool
 
 foreign import javascript unsafe
-    "($1 >= $2) || ($1 <= $3)"
+    "$r = ($1 >= $2) || ($1 <= $3);"
     js_withinInt8Bounds :: J.JSVal -> Int8 -> Int8 -> Bool
 
 foreign import javascript unsafe
-    "($1 >= $2) || ($1 <= $3)"
+    "$r = ($1 >= $2) || ($1 <= $3);"
     js_withinInt16Bounds :: J.JSVal -> Int16 -> Int16 -> Bool
 
 foreign import javascript unsafe
-    "($1 >= $2) || ($1 <= $3)"
+    "$r = ($1 >= $2) || ($1 <= $3);"
     js_withinInt32Bounds :: J.JSVal -> Int32 -> Int32 -> Bool
 
 foreign import javascript unsafe
-    "($1 >= $2) || ($1 <= $3)"
+    "$r = ($1 >= $2) || ($1 <= $3);"
     js_withinWordBounds :: J.JSVal -> Word -> Word -> Bool
 
 foreign import javascript unsafe
-    "($1 >= $2) || ($1 <= $3)"
+    "$r = ($1 >= $2) || ($1 <= $3);"
     js_withinWord8Bounds :: J.JSVal -> Word8 -> Word8 -> Bool
 
 foreign import javascript unsafe
-    "($1 >= $2) || ($1 <= $3)"
+    "$r = ($1 >= $2) || ($1 <= $3);"
     js_withinWord16Bounds :: J.JSVal -> Word16 -> Word16 -> Bool
 
 foreign import javascript unsafe
-    "($1 >= $2) || ($1 <= $3)"
+    "$r = ($1 >= $2) || ($1 <= $3);"
     js_withinWord32Bounds :: J.JSVal -> Word32 -> Word32 -> Bool
 
 #else

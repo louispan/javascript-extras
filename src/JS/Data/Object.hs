@@ -82,7 +82,7 @@ instance IObject JSObject
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-  "globalThis"
+  "$r = globalThis;"
   js_globalThis :: JSVal
 
 foreign import javascript unsafe
@@ -90,15 +90,15 @@ foreign import javascript unsafe
   js_mkObject :: IO JSObject
 
 foreign import javascript unsafe
-  "Object.entries($1)"
+  "$r = Object.entries($1);"
   js_object_entries :: JSVal -> IO JSVal
 
 foreign import javascript unsafe
-  "Object.fromEntries($1)"
+  "$r = Object.fromEntries($1);"
   js_object_fromEntries :: JSVal -> IO JSObject
 
 foreign import javascript unsafe
-  "typeof $1 === 'undefined' || $1 === null"
+  "$r = typeof $1 === 'undefined' || $1 === null;"
   js_isInvalid :: JSVal -> Bool
 
 -- | throws an exception if undefined or null
@@ -108,7 +108,7 @@ foreign import javascript unsafe
 
 -- | throws an exception if undefined or null
 foreign import javascript unsafe
-  "$1[$2]"
+  "$r = $1[$2]"
   js_unsafeGetProperty :: JSVal -> JSVal -> IO JSVal
 
 -- | throws an exception if undefined or null

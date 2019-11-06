@@ -29,11 +29,11 @@ instance IUIEvent UIEvent
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "$1.detail"
+    "$r = $1.detail;"
     js_detail :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.view"
+    "$r = $1.view;"
     js_view :: JSVal -> JSVal
 #else
 

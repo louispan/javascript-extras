@@ -25,7 +25,7 @@ instance FromJS JSObject where
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "typeof $1 === 'object'"
+    "$r = typeof $1 === 'object';"
     js_isObject :: JSVal -> Bool
 
 #else

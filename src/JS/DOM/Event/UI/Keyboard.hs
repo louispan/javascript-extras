@@ -65,51 +65,51 @@ instance IKeyboardEvent KeyboardEvent
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "$1.altKey"
+    "$r = $1.altKey;"
     js_altKey :: JSVal -> Bool
 
 foreign import javascript unsafe
-    "$1.charCode"
+    "$r = $1.charCode;"
     js_charCode :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.ctrlKey"
+    "$r = $1.ctrlKey;"
     js_ctrlKey :: JSVal -> Bool
 
 foreign import javascript unsafe
-    "$1.getModifierState($2)"
+    "$r = $1.getModifierState($2);"
     js_getModifierState :: JSVal -> JSString -> Bool
 
 foreign import javascript unsafe
-    "$1.key"
+    "$r = $1.key;"
     js_key :: JSVal -> JSString
 
 foreign import javascript unsafe
-    "$1.keyCode"
+    "$r = $1.keyCode;"
     js_keyCode :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.locale"
+    "$r = $1.locale;"
     js_locale :: JSVal -> JSString
 
 foreign import javascript unsafe
-    "$1.location"
+    "$r = $1.location;"
     js_location :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.metaKey"
+    "$r = $1.metaKey;"
     js_metaKey :: JSVal -> Bool
 
 foreign import javascript unsafe
-    "$1.repeat"
+    "$r = $1.repeat;"
     js_repeat :: JSVal -> Bool
 
 foreign import javascript unsafe
-    "$1.shiftKey"
+    "$r = $1.shiftKey;"
     js_shiftKey :: JSVal -> Bool
 
 foreign import javascript unsafe
-    "$1.which"
+    "$r = $1.which;"
     js_which :: JSVal -> Int
 
 #else

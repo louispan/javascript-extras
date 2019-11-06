@@ -26,7 +26,7 @@ instance IEvent HashChangeEvent
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "typeof $1 !== 'undefined' && $1 instanceof HashChangeEvent"
+    "$r = typeof $1 !== 'undefined' && $1 instanceof HashChangeEvent;"
     js_isHashChangeEvent :: JSVal -> Bool
 
 #else

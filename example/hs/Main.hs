@@ -6,8 +6,9 @@ module Main (main) where
 #ifdef __GHCJS__
 
 import qualified Data.JSString as J
-import qualified JS.Data
-import qualified JS.Data.Unsafe ()
+import GHCJS.Foreign.Callback
+import JS.Data
+import JS.Data.Unsafe ()
 
 test :: JSVal -> IO ()
 test x = do
@@ -21,13 +22,13 @@ main = do
     test js_int
     test js_obj
     cb <- syncCallback' (pure (toJS js_int))
-    test (jsval cb)
+    test (toJS cb)
     releaseCallback cb
-    test (jsval cb)
+    test (toJS cb)
 
 foreign import javascript unsafe
   "document.write('<p>' + $1 + '</p>')"
-  js_write :: JS.JSString -> IO ()
+  js_write :: J.JSString -> IO ()
 
 foreign import javascript unsafe
   "675324"

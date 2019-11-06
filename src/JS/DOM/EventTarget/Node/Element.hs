@@ -25,11 +25,11 @@ instance IElement Element
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "$1.className"
+    "$r = $1.className;"
     js_className :: JSVal -> IO JSString
 
 foreign import javascript unsafe
-    "$1.id"
+    "$r = $1.id;"
     js_id :: JSVal -> IO JSString
 
 #else

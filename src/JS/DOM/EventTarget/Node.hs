@@ -44,15 +44,15 @@ instance INode Document
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "$1.nodeName"
+    "$r = $1.nodeName;"
     js_nodeName :: JSVal -> JSString
 
 foreign import javascript unsafe
-    "$1.nodeType"
+    "$r = $1.nodeType;"
     js_nodeType :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.ownerDocument"
+    "$r = $1.ownerDocument;"
     js_ownerDocument :: JSVal -> JSVal
 
 #else

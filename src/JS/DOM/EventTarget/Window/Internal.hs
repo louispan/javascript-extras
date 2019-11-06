@@ -26,7 +26,7 @@ instance IEventTarget Window
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "typeof $1 !== 'undefined' && $1 instanceof Window"
+    "$r = typeof $1 !== 'undefined' && $1 instanceof Window;"
     js_isWindow :: JSVal -> Bool
 
 #else

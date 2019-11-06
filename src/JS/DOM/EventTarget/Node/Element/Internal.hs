@@ -28,7 +28,7 @@ instance INode Element
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "typeof $1 !== 'undefined' && $1 instanceof Element"
+    "$r = typeof $1 !== 'undefined' && $1 instanceof Element;"
     js_isElement :: JSVal -> Bool
 
 #else

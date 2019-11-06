@@ -56,39 +56,39 @@ instance IMouseEvent MouseEvent
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "$1.button"
+    "$r = $1.button;"
     js_button :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.buttons"
+    "$r = $1.buttons;"
     js_buttons :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.clientX"
+    "$r = $1.clientX;"
     js_clientX :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.clientY"
+    "$r = $1.clientY;"
     js_clientY :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.pageX"
+    "$r = $1.pageX;"
     js_pageX :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.pageY"
+    "$r = $1.pageY;"
     js_pageY :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.relatedTarget"
+    "$r = $1.relatedTarget;"
     js_relatedTarget :: JSVal -> JSVal
 
 foreign import javascript unsafe
-    "$1.screenX"
+    "$r = $1.screenX;"
     js_screenX :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.screenY"
+    "$r = $1.screenY;"
     js_screenY :: JSVal -> Int
 
 #else

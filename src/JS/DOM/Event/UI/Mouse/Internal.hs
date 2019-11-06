@@ -30,7 +30,7 @@ instance ICommonKeyboardEvent MouseEvent
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "typeof $1 !== 'undefined' && $1 instanceof MouseEvent"
+    "$r = typeof $1 !== 'undefined' && $1 instanceof MouseEvent;"
     js_isMouseEvent :: JSVal -> Bool
 
 #else

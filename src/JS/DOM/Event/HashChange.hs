@@ -28,11 +28,11 @@ instance IHashChangeEvent HashChangeEvent
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "$1.oldURL"
+    "$r = $1.oldURL;"
     js_oldURL :: JSVal -> JSString
 
 foreign import javascript unsafe
-    "$1.newURL"
+    "$r = $1.newURL;"
     js_newURL :: JSVal -> JSString
 
 #else

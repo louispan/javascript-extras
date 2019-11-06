@@ -28,7 +28,7 @@ instance IUIEvent KeyboardEvent
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "typeof $1 !== 'undefined' && $1 instanceof KeyboardEvent"
+    "$r = typeof $1 !== 'undefined' && $1 instanceof KeyboardEvent;"
     js_isKeyboardEvent :: JSVal -> Bool
 
 #else

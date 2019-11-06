@@ -24,7 +24,7 @@ instance IWindow Window
 
 
 foreign import javascript unsafe
-    "$1.document"
+    "$r = $1.document;"
     js_document :: JSVal -> IO JSVal
 
 #else

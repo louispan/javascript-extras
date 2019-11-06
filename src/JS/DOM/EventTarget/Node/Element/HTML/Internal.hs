@@ -30,7 +30,7 @@ instance IElement HTMLElement
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "typeof $1 !== 'undefined' && $1 instanceof HTMLElement"
+    "$r = typeof $1 !== 'undefined' && $1 instanceof HTMLElement;"
     js_isHTMLElement :: JSVal -> Bool
 
 #else

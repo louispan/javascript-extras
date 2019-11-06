@@ -26,7 +26,7 @@ instance IEvent UIEvent
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "typeof $1 !== 'undefined' && $1 instanceof UIEvent"
+    "$r = typeof $1 !== 'undefined' && $1 instanceof UIEvent;"
     js_isUIEvent :: JSVal -> Bool
 
 #else

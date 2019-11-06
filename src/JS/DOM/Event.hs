@@ -60,15 +60,15 @@ instance IEvent Event
 #ifdef __GHCJS__
 
 foreign import javascript unsafe
-    "$1.bubbles"
+    "$r = $1.bubbles;"
     js_bubbles :: JSVal -> Bool
 
 foreign import javascript unsafe
-    "$1.cancelable"
+    "$r = $1.cancelable;"
     js_cancelable :: JSVal -> Bool
 
 foreign import javascript unsafe
-    "$1.currentTarget"
+    "$r = $1.currentTarget;"
     js_currentTarget :: JSVal -> IO JSVal
 
 foreign import javascript unsafe
@@ -76,27 +76,27 @@ foreign import javascript unsafe
     js_preventDefault :: JSVal -> IO ()
 
 foreign import javascript unsafe
-    "$1.eventPhase"
+    "$r = $1.eventPhase;"
     js_eventPhase :: JSVal -> IO Int
 
 foreign import javascript unsafe
-    "$1.isTrusted"
+    "$r = $1.isTrusted;"
     js_isTrusted :: JSVal -> Bool
 
 foreign import javascript unsafe
-    "$1.target"
+    "$r = $1.target;"
     js_target :: JSVal -> IO EventTarget
 
 foreign import javascript unsafe
-    "$1.timeStamp"
+    "$r = $1.timeStamp;"
     js_timeStamp :: JSVal -> Int
 
 foreign import javascript unsafe
-    "$1.type"
+    "$r = $1.type;"
     js_eventType :: JSVal -> JSString
 
 foreign import javascript unsafe
-    "$1.defaultPrevented"
+    "$r = $1.defaultPrevented;"
     js_defaultPrevented :: JSVal -> IO Bool
 
 foreign import javascript unsafe
