@@ -23,6 +23,7 @@ library
   exposed-modules:     JS.Aeson.Instances
                        JS.Data
                        JS.Data.Cast
+                       JS.Data.Console
                        JS.Data.Instances
                        JS.Data.Object
                        JS.Data.Object.Internal
