@@ -23,7 +23,6 @@ import GHC.Int
 import GHC.Word
 import qualified GHCJS.Foreign.Callback as J
 import qualified GHCJS.Foreign.Export as J
-import qualified GHCJS.Foreign.Internal as JFI
 import qualified GHCJS.Marshal.Pure as J
 import qualified GHCJS.Types as J
 import qualified JavaScript.Array.Internal as JAI
@@ -153,101 +152,88 @@ instance {-# OVERLAPPABLE #-} FromJS a => FromJS [a] where
         then sequenceA (fromJS <$> (JAI.toList (JAI.SomeJSArray a)))
         else Nothing
 
--- instance FromJS (JAI.SomeJSArray m) where
---     validFromJS a = JFI.jsonTypeOf a == JFI.JSONArray
---     fromJS a | validFromJS @(JAI.SomeJSArray m) a = Just $ JAI.SomeJSArray a
---     fromJS _ = Nothing
-
--- instance FromJS JOI.Object where
---     validFromJS a = JFI.jsonTypeOf a == JFI.JSONObject
---     fromJS a | validFromJS @(JOI.Object) a = Just $ JOI.Object a
---     fromJS _ = Nothing
-
 instance FromJS Bool where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONBool
+    validFromJS = js_isBool
     fromJS a | validFromJS @Bool a = J.pFromJSVal a
     fromJS _ = Nothing
 
 -- | This will only succeed on a single character string
 instance FromJS Char where
     validFromJS a = isJust (fromJS @Char a)
-    fromJS a =
-        case JFI.jsonTypeOf a of
-            JFI.JSONString ->
-                let a' = J.pFromJSVal a -- convert to JSString
-                    mb = JS.uncons a'
-                in case mb of
-                       Nothing -> Nothing
-                       Just (h, t) ->
-                           if JS.null t
-                               then Just h
-                               else Nothing
-            _ -> Nothing
+    fromJS a = if js_isString a
+        then
+            let a' = J.pFromJSVal a -- convert to JSString
+                mb = JS.uncons a'
+            in case mb of
+                   Nothing -> Nothing
+                   Just (h, t) ->
+                       if JS.null t
+                           then Just h
+                           else Nothing
+        else Nothing
 
 instance FromJS Double where
-    validFromJS a = let t = JFI.jsonTypeOf a
-      in t == JFI.JSONInteger || t == JFI.JSONFloat
+    validFromJS = js_isNumber
     fromJS a | validFromJS @Double a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS Float where
-    validFromJS a = let t = JFI.jsonTypeOf a
-      in t == JFI.JSONInteger || t == JFI.JSONFloat
+    validFromJS = js_isNumber
     fromJS a | validFromJS @Float a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS Int where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONInteger && js_withinIntBounds a minBound maxBound
+    validFromJS a = js_isNumber a && js_withinIntBounds a minBound maxBound
     fromJS a | validFromJS @Int a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS Int8 where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONInteger && js_withinInt8Bounds a minBound maxBound
+    validFromJS a = js_isNumber a && js_withinInt8Bounds a minBound maxBound
     fromJS a | validFromJS @Int8 a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS Int16 where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONInteger && js_withinInt16Bounds a minBound maxBound
+    validFromJS a = js_isNumber a && js_withinInt16Bounds a minBound maxBound
     fromJS a | validFromJS @Int16 a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS Int32 where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONInteger && js_withinInt32Bounds a minBound maxBound
+    validFromJS a = js_isNumber a && js_withinInt32Bounds a minBound maxBound
     fromJS a | validFromJS @Int32 a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS Word where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONInteger && js_withinWordBounds a minBound maxBound
+    validFromJS a = js_isNumber a && js_withinWordBounds a minBound maxBound
     fromJS a | validFromJS @Word a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS Word8 where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONInteger && js_withinWord8Bounds a minBound maxBound
+    validFromJS a = js_isNumber a && js_withinWord8Bounds a minBound maxBound
     fromJS a | validFromJS @Word8 a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS Word16 where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONInteger && js_withinWord16Bounds a minBound maxBound
+    validFromJS a = js_isNumber a && js_withinWord16Bounds a minBound maxBound
     fromJS a | validFromJS @Word16 a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS Word32 where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONInteger && js_withinWord32Bounds a minBound maxBound
+    validFromJS a = js_isNumber a && js_withinWord32Bounds a minBound maxBound
     fromJS a | validFromJS @Word32 a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS T.Text where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONString
+    validFromJS = js_isString
     fromJS a | validFromJS @T.Text a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance {-# OVERLAPPING #-} FromJS String where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONString
+    validFromJS = js_isString
     fromJS a | validFromJS @String a = J.pFromJSVal a
     fromJS _ = Nothing
 
 instance FromJS J.JSString where
-    validFromJS a = JFI.jsonTypeOf a == JFI.JSONString
+    validFromJS = js_isString
     fromJS a | validFromJS @J.JSString a = J.pFromJSVal a
     fromJS _ = Nothing
 
@@ -285,6 +271,18 @@ foreign import javascript unsafe
 foreign import javascript unsafe
     "$r = typeof $1 === 'string' && $1 === '()';"
     js_isValidUnit :: J.JSVal -> Bool
+
+foreign import javascript unsafe
+    "$r = typeof $1 === 'string';"
+    js_isString :: J.JSVal -> Bool
+
+foreign import javascript unsafe
+    "$r = typeof $1 === 'boolean';"
+    js_isBool :: J.JSVal -> Bool
+
+foreign import javascript unsafe
+    "$r = typeof $1 === 'number';"
+    js_isNumber :: J.JSVal -> Bool
 
 foreign import javascript unsafe
     "$r = ($1 >= $2) || ($1 <= $3);"
@@ -337,6 +335,12 @@ js_unsafeHead = id
 
 js_isValidUnit :: J.JSVal -> Bool
 js_isValidUnit _ = False
+
+js_isString :: J.JSVal -> Bool
+js_isString _ = False
+
+js_isBool :: J.JSVal -> Bool
+js_isBool_ = False
 
 js_withinIntBounds :: J.JSVal -> Int -> Int -> Bool
 js_withinIntBounds _ _ _ = False
