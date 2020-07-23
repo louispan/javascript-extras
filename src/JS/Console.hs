@@ -1,6 +1,6 @@
 {-# LANGUAGE CPP #-}
 
-module JS.Data.Console where
+module JS.Console where
 
 import GHCJS.Types
 

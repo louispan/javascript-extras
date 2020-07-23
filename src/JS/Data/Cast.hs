@@ -340,7 +340,10 @@ js_isString :: J.JSVal -> Bool
 js_isString _ = False
 
 js_isBool :: J.JSVal -> Bool
-js_isBool_ = False
+js_isBool _ = False
+
+js_isNumber :: J.JSVal -> Bool
+js_isNumber _ = False
 
 js_withinIntBounds :: J.JSVal -> Int -> Int -> Bool
 js_withinIntBounds _ _ _ = False

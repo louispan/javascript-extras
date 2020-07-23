@@ -21,9 +21,9 @@ library
   hs-source-dirs:      src
   js-sources:          jsbits/javascript-extras.js
   exposed-modules:     JS.Aeson.Instances
+                       JS.Console
                        JS.Data
                        JS.Data.Cast
-                       JS.Data.Console
                        JS.Data.Instances
                        JS.Data.Object
                        JS.Data.Object.Internal
